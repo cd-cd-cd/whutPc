@@ -1,6 +1,7 @@
+import { message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { getUser } from '../../api/user'
+import { exitUser, getUser } from '../../api/user'
 import { IResUserInfo } from '../../libs/model'
 import style from './index.module.scss'
 interface IEmail {
@@ -16,6 +17,14 @@ export default function HomeHeader () {
     const res = await getUser(email)
     if (res) {
       setUser(res.data)
+    }
+  }
+
+  const exit = async () => {
+    const res = await exitUser()
+    if (res?.code === 200) {
+      message.success('退出成功')
+      navigator('/login')
     }
   }
 
@@ -38,7 +47,7 @@ export default function HomeHeader () {
             email
           }
         })}>个人中心</div>
-        <div className={style.block}>退出</div>
+        <div className={style.block} onClick={() => exit()}>退出</div>
       </div>
     </div>
   )

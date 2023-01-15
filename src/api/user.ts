@@ -104,3 +104,11 @@ export const postAvatar = async (file: FormData) => {
     data: file
   })
 }
+
+// 退出
+export const exitUser = async () => {
+  return await request({
+    url: '/user/logout',
+    method: 'PUT'
+  })
+}
