@@ -19,6 +19,7 @@ export default function PublicArticle () {
   const [previewTitle, setPreviewTitle] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([
   ])
+  // const [blobAvatar, setBlobAvatar] = useState<Blob>()
 
   const getBase64 = (file: RcFile): Promise<string> =>
     new Promise((resolve, reject) => {
@@ -55,7 +56,7 @@ export default function PublicArticle () {
     setArticle({ ...article, articleCategoryId: Number(value) })
   }
 
-  // // 检查图片格式和大小
+  // 检查图片格式和大小
   // const beforeUpload = (file: RcFile) => {
   //   const isPNG = file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/webp' || file.type === 'image/jpg'
   //   if (!isPNG) {
@@ -119,8 +120,9 @@ export default function PublicArticle () {
                 fileList={fileList}
                 onPreview={handlePreview}
                 onChange={handleChange}
+                action='/article/uploadImg'
               >
-                {fileList.length >= 8 ? null : uploadButton}
+                {fileList.length >= 9 ? null : uploadButton}
               </Upload>
               <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
                 <img alt="example" style={{ width: '100%' }} src={previewImage} />

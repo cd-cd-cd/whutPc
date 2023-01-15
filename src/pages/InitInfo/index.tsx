@@ -66,7 +66,8 @@ export default function InitInfo () {
       if (confirmPassword === password) {
         const res = await changePassword(password, oldPassword)
         if (res?.code === 200) {
-          message.success('密码修改成功')
+          message.success('密码修改成功, 正跳转至首页重新登录')
+          navigator('/login')
         } else {
           message.error('密码修改失败请重试')
         }
@@ -181,50 +182,54 @@ export default function InitInfo () {
       </div>
       <div className={style.main}>
         <div className={style.info}>
-          <div className={style.avatar_box} onClick={() => setAvatarVisible(true)}>
-            <img src={user?.avatar} className={style.avatarIcon}></img>
-            <div className={style.mask}>
-              <span className={style.change_text}>修改头像</span>
-            </div>
-          </div>
-          <span className={style.nickName}>{user?.nickName}</span>
-          <span className={style.user_id}>ID {user?.email}</span>
-        </div>
-        <div className={style.container}>
-          <div className={style.title}>
-            个人信息
-          </div>
-          {nick
-            ? <div className={style.box}>
-              <div className={style.change_nickName}>
-                <Input className={style.input}
-                  style={{ height: '30px' }}
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                ></Input>
-                <Button className={style.btn} onClick={() => { setNick(false); setName(user?.nickName) }}>取消</Button>
-                <Button type='primary' className={style.btn} onClick={() => changeName()}>确认</Button>
+          <div className={style.left_box}>
+            <div className={style.avatar_box} onClick={() => setAvatarVisible(true)}>
+              <img src={user?.avatar} className={style.avatarIcon}></img>
+              <div className={style.mask}>
+                <span className={style.change_text}>修改头像</span>
               </div>
-              <div className={style.span}>{returnNameInfo()}</div>
             </div>
-            : <div className={style.static}>
-              <span className={style.name}>{user?.nickName}</span>
-              <a className={style.change} onClick={() => setNick(true)}>修改</a>
-            </div>
-          }
-          <div className={style.gender_box}>
-            <span className={style.sex_label}>性别:</span>
-            <Radio.Group onChange={onChange} value={gender}>
-              <Radio value={0} className={style.radio}>男</Radio>
-              <Radio value={1} className={style.radio}>女</Radio>
-            </Radio.Group>
+            <span className={style.nickName}>{user?.nickName}</span>
+            <span className={style.user_id}>ID {user?.email}</span>
           </div>
-        </div>
-        <div className={style.container2}>
-          <div className={style.title}>安全设置</div>
-          <div className={style.secure_box}>
-            <span>修改密码</span>
-            <a className={style.modify} onClick={showModal}>修改</a>
+          <div className={style.right_box}>
+            <div className={style.container}>
+              <div className={style.title}>
+                个人信息
+              </div>
+              {nick
+                ? <div className={style.box}>
+                  <div className={style.change_nickName}>
+                    <Input className={style.input}
+                      style={{ height: '30px' }}
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    ></Input>
+                    <Button className={style.btn} onClick={() => { setNick(false); setName(user?.nickName) }}>取消</Button>
+                    <Button type='primary' className={style.btn} onClick={() => changeName()}>确认</Button>
+                  </div>
+                  <div className={style.span}>{returnNameInfo()}</div>
+                </div>
+                : <div className={style.static}>
+                  <span className={style.name}>{user?.nickName}</span>
+                  <a className={style.change} onClick={() => setNick(true)}>修改</a>
+                </div>
+              }
+              <div className={style.gender_box}>
+                <span className={style.sex_label}>性别:</span>
+                <Radio.Group onChange={onChange} value={gender}>
+                  <Radio value={0} className={style.radio}>男</Radio>
+                  <Radio value={1} className={style.radio}>女</Radio>
+                </Radio.Group>
+              </div>
+            </div>
+            <div className={style.container2}>
+              <div className={style.title}>安全设置</div>
+              <div className={style.secure_box}>
+                <span>修改密码</span>
+                <a className={style.modify} onClick={showModal}>修改</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

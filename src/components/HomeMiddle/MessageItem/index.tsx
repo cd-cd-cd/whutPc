@@ -20,13 +20,13 @@ export default function MessageItem ({ post }: Props) {
   const [eye, setEye] = useState(false)
   const [heart, setHeart] = useState(false)
   const [comment, setComment] = useState(false)
-  const [messageItem, setMessageItem] = useState<IRecord>()
+  const [messageItem, setMessageItem] = useState<IRecord>(post)
 
   // 点赞或取消
   const toggleHeart = async (id: string) => {
     const res = await toggleLike(id)
     if (res?.code === 200) {
-      console.log(res.data)
+      getArticle()
     }
   }
 
@@ -35,7 +35,7 @@ export default function MessageItem ({ post }: Props) {
     const res = await getRetailArticle(post.articleId)
     if (res?.code === 200) {
       setMessageItem(res.data)
-      console.log('message', res.data, post)
+      console.log('message', res.data)
     } else {
       console.log('error')
     }
@@ -43,37 +43,36 @@ export default function MessageItem ({ post }: Props) {
 
   useEffect(() => {
     getArticle()
-    console.log(messageItem)
   }, [])
 
   return (
     <div className={style.itemBox}>
       <div className={style.itemHeader}>
         <div className={style.avatarBox}>
-          <img className={style.avatarImg} src={post.avatar}></img>
+          <img className={style.avatarImg} src={messageItem.avatar}></img>
         </div>
         <div className={style.info}>
           <div className={style.nickName}>
-            <div>{post.name}</div>
-            {post.articleCategoryName
-              ? <Tag color="#eb7340" className={style.tag}>{post.articleCategoryName}</Tag>
+            <div>{messageItem.name}</div>
+            {messageItem.articleCategoryName
+              ? <Tag color="#eb7340" className={style.tag}>{messageItem.articleCategoryName}</Tag>
               : null
             }
           </div>
           <div className={style.time}>
-            {dayjs(post.createdTime).format('YYYY-MM-DD HH:mm:ss')}
+            {dayjs(messageItem.createdTime).format('YYYY-MM-DD HH:mm:ss')}
           </div>
         </div>
       </div>
       <div className={style.detailText}>
-        <div className={style.title}>{post.articleTitle}</div>
-        <div className={style.content}>{post.articleContent}</div>
+        <div className={style.title}>{messageItem.articleTitle}</div>
+        <div className={style.content}>{messageItem.articleContent}</div>
       </div>
       <div className={style.imgBox}>
         <div className={style.imgs}>
           {
-            post.articleImg
-              ? post.articleImg.split(';')
+            messageItem.articleImg
+              ? messageItem.articleImg.split(';')
                 .map((img, index) =>
                   <img key={index} className={style.img} src={img}></img>
                 ) : null
@@ -87,7 +86,7 @@ export default function MessageItem ({ post }: Props) {
             onMouseOut={() => { setEye(false) }}
             src={eye ? eyeHover : eyeIcon}
             className={style.icon}></img>
-          <p className={eye ? style.hover : style.normal}>{post.articleViewCount}</p>
+          <p className={eye ? style.hover : style.normal}>{messageItem.articleViewCount}</p>
         </div>
         <div className={style.iconBox}>
           <img
@@ -95,22 +94,22 @@ export default function MessageItem ({ post }: Props) {
             onMouseOut={() => { setComment(false) }}
             src={comment ? commentHover : commentIcon}
             className={style.icon}></img>
-          <p className={comment ? style.hover : style.normal}>{post.articleCommentCount}</p>
+          <p className={comment ? style.hover : style.normal}>{messageItem.articleCommentCount}</p>
         </div>
         <div className={style.iconBox}>
-          {post.liked
+          {messageItem.liked
             ? <><img
-              onClick={() => toggleHeart(post.articleId)}
+              onClick={() => toggleHeart(messageItem.articleId)}
               src={heartHover}
               className={style.icon}></img>
-              <p className={style.hover}>{post.articleLikeCount}</p></>
+              <p className={style.hover}>{messageItem.articleLikeCount}</p></>
             : <><img
               onMouseOver={() => { setHeart(true) }}
               onMouseOut={() => { setHeart(false) }}
-              onClick={() => toggleHeart(post.articleId)}
+              onClick={() => toggleHeart(messageItem.articleId)}
               src={heart ? heartHover : heartIcon}
               className={style.icon}></img>
-              <p className={heart ? style.hover : style.normal}>{post.articleLikeCount}</p>
+              <p className={heart ? style.hover : style.normal}>{messageItem.articleLikeCount}</p>
             </>
           }
         </div>
