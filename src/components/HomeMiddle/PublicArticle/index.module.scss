@@ -1,0 +1,74 @@
+.back{
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #f2f2f2;
+  padding: 20px;
+}
+
+.info{
+  text-align: center;
+  color: gray;
+  margin-bottom: 10px;
+}
+.title{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .need{
+    color: red;
+  }
+  .titleText{
+    width: 50px;
+    color: #333333;
+  }
+  .titleInput{
+    flex: 1;
+  }
+}
+
+.content{
+  margin-top: 15px;
+}
+
+.putImgs{
+  padding: 20px 60px 20px 110px;
+}
+
+.buttoms{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .btn{
+    width: 90px;
+    margin: 0 65px;
+  }
+}
+
+.infoInit{
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  border-radius: 20px;
+  color: gray;
+  margin-bottom: 10px;
+}
+
+.infoInit:hover{
+  background-color: #f2f2f2;
+}
+
+.select{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  align-items: center;
+
+  .catagoryTtitle{
+    padding-left: 6px;
+    width: 56px;
+  }
+}

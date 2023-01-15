@@ -1,0 +1,41 @@
+.back {
+  height: 50px;
+  width: 100%;
+  background-color: #fff;
+  padding-left: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .click {
+    width: 72px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    color: #FF8300;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 0 5px;
+  }
+
+  .click:hover {
+    background-color: rgb(255, 242, 229);
+    border-radius: 15px;
+  }
+
+  .normal {
+    width: 72px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    color: #333333;
+    cursor: pointer;
+    margin: 0 5px;
+  }
+
+  .normal:hover {
+    background-color: rgb(255, 242, 229);
+    border-radius: 15px;
+    color: #FF8300;
+  }
+}

@@ -1,0 +1,123 @@
+.itemBox {
+  width: 100%;
+  padding: 20px 20px;
+  border: 1px solid #f2f2f2;
+  background-color: #fff;
+
+  .itemHeader {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    .avatarBox {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 1px solid #f2f2f2;
+      overflow: hidden;
+
+      .avatarImg {
+        width: 50px;
+      }
+    }
+
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      margin-left: 10px;
+      flex: 1;
+
+      .nickName {
+        font-size: 14px;
+        font-weight: 700;
+        color: #333333;
+        margin-bottom: 5px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+
+        .tag {
+          margin-left: auto;
+        }
+      }
+
+      .time {
+        font-size: 12px;
+        color: #939393;
+      }
+    }
+  }
+
+  .detailText {
+    width: 100%;
+    padding-left: 60px;
+    color: #333333;
+
+    .title {
+      color: gray;
+      margin-top: 3px;
+      margin-bottom: 2px;
+    }
+
+    .content {
+      line-height: 24px;
+    }
+  }
+
+  .imgBox {
+    width: 100%;
+    padding: 15px 130px 10px 60px;
+
+    .imgs {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-gap: 5px 5px;
+      overflow: hidden;
+
+      .img {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: 50%;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+
+.bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 12px;
+
+  .iconBox {
+    color: #808080;
+    font-size: 12px;
+    height: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 3px;
+      margin-top: 1px;
+      cursor: pointer;
+    }
+  }
+}
+
+.normal {
+  cursor: pointer;
+}
+
+.hover {
+  color: #ff8200;
+  cursor: pointer;
+}
