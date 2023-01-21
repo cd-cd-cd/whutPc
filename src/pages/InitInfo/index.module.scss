@@ -20,7 +20,6 @@
   }
 
   .main {
-    flex: 1;
     background-color: rgb(240, 248, 255);
     @include alignCenter()
   }
@@ -224,4 +223,10 @@
 
 .right_box{
   flex: 1;
+}
+
+.article_box{
+  margin-top: 20px;
+  width: 910px;
+  padding: 10px 70px;
 }

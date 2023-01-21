@@ -5,11 +5,14 @@ import { Button, Input, Upload, message, Modal, Radio, RadioChangeEvent, Form } 
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { changePassword, editInfo, getUser, postAvatar } from '../../api/user'
-import { IResUserInfo } from '../../libs/model'
+import { IRecord, IResUserInfo } from '../../libs/model'
 import { useLocation, useNavigate } from 'react-router-dom'
 import useVerify from '../../hooks/useVerify'
 import { useForm } from 'antd/lib/form/Form'
 import returnIcon from '../../assets/return.svg'
+import { getSelfPosts } from '../../api/article'
+import MessageItem from '../../components/HomeMiddle/MessageItem'
+// import MessageItem from '../../components/HomeMiddle/MessageItem'
 
 interface IEmail {
   email: string
@@ -28,6 +31,7 @@ export default function InitInfo () {
   const [nick, setNick] = useState(false)
   const [gender, setGender] = useState<0 | 1>()
   const [user, setUser] = useState<IResUserInfo>()
+  const [posts, setPosts] = useState<IRecord[]>([])
 
   const uploadButton = (
     <div>
@@ -172,8 +176,19 @@ export default function InitInfo () {
     }
   }
 
+  const getPosts = async () => {
+    if (email) {
+      const res = await getSelfPosts(email, 1)
+      if (res?.data.records) {
+        console.log(res.data.records)
+        setPosts(res?.data.records)
+      }
+    }
+  }
+
   useEffect(() => {
     getInfo()
+    getPosts()
   }, [])
   return (
     <div className={style.init}>
@@ -231,6 +246,15 @@ export default function InitInfo () {
               </div>
             </div>
           </div>
+        </div>
+        <div className={style.article_box}>
+          {
+            posts.map((post) =>
+              <div key={post.articleId}>
+                <MessageItem post={post}></MessageItem>
+              </div>
+            )
+          }
         </div>
       </div>
       <Modal title="修改密码"

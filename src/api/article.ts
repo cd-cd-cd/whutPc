@@ -63,3 +63,24 @@ export const getRetailArticle = async (id: string) => {
     }
   })
 }
+
+interface resSelfPosts {
+  countId: string
+  pages: number
+  records: IRecord[]
+  searchCount: boolean
+  size: number
+  total: number
+}
+
+// 查询某用户的所有文章
+export const getSelfPosts = async (useId: string, current: number) => {
+  return await request<resSelfPosts>({
+    url: '/article/all',
+    method: 'GET',
+    params: {
+      useId,
+      current
+    }
+  })
+}
