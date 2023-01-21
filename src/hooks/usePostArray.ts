@@ -11,7 +11,6 @@ export default function usePostArray () {
       setPostList(res.data.records)
     }
   }
-
   // 展示最热文章
   const hotArticle = async () => {
     const res = await HottestArticles()

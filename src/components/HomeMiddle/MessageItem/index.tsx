@@ -35,7 +35,6 @@ export default function MessageItem ({ post }: Props) {
     const res = await getRetailArticle(post.articleId)
     if (res?.code === 200) {
       setMessageItem(res.data)
-      console.log('message', res.data)
     } else {
       console.log('error')
     }
