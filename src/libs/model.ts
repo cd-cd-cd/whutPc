@@ -50,3 +50,12 @@ export interface IResUserInfo {
   nickName: string,
   sex: 0 | 1
 }
+
+export interface resSelfPosts {
+  countId: string
+  pages: number
+  records: IRecord[]
+  searchCount: boolean
+  size: number
+  total: number
+}

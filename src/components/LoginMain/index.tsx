@@ -31,14 +31,9 @@ export default function LoginMain () {
         message.info({ content: res.errorMsg })
       } else if (res?.code === 200) {
         localStorage.setItem('token', res.data)
-        console.log(res)
+        localStorage.setItem('email', email)
         message.success('登录成功')
-        navigator('/home', {
-          replace: false,
-          state: {
-            email
-          }
-        })
+        navigator('/home')
       }
     }
   }

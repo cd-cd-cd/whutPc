@@ -7,6 +7,7 @@ import InitInfo from './pages/InitInfo'
 import Home from './pages/Home'
 import { IRecord, ICategory, rule } from './libs/model'
 import { StoreProvider } from './hooks/store'
+import RetailArticle from './pages/RetailArticle'
 
 function App () {
   const [PostList, setPostList] = useState<IRecord[]>([])
@@ -30,6 +31,7 @@ function App () {
           <Route path='/register' element={<Register />}></Route>
           <Route path='/init' element={<InitInfo />}></Route>
           <Route path='/home' element={<Home />}></Route>
+          <Route path='/Retail' element={<RetailArticle/>}></Route>
           {/* <Route path='*' element={<Navigate to='/register'/>}></Route> */}
           <Route path='*' element={<Navigate to='/home' />}></Route>
         </Routes>

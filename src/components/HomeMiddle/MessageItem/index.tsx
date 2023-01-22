@@ -10,6 +10,8 @@ import commentIcon from '../../../assets/comment_gray.png'
 import commentHover from '../../../assets/comment_orange.png'
 import { IRecord } from '../../../libs/model'
 import { getRetailArticle, toggleLike } from '../../../api/article'
+import { useNavigate } from 'react-router-dom'
+import useItems from '../../../hooks/useItems'
 // import defaultImg  from '../.././../assets/'
 
 interface Props {
@@ -21,7 +23,9 @@ export default function MessageItem ({ post }: Props) {
   const [heart, setHeart] = useState(false)
   const [comment, setComment] = useState(false)
   const [messageItem, setMessageItem] = useState<IRecord>(post)
-
+  const navigator = useNavigate()
+  const { queryAttention, toggleConcerned } = useItems()
+  const [attention, setAttention] = useState<boolean>()
   // 点赞或取消
   const toggleHeart = async (id: string) => {
     const res = await toggleLike(id)
@@ -35,8 +39,17 @@ export default function MessageItem ({ post }: Props) {
     const res = await getRetailArticle(post.articleId)
     if (res?.code === 200) {
       setMessageItem(res.data)
+      const temp = await queryAttention(res.data.articleUserId)
+      setAttention(temp)
     } else {
       console.log('error')
+    }
+  }
+
+  // 关注&取消关注
+  const toggleFollow = async () => {
+    if (typeof attention !== 'undefined') {
+      toggleConcerned(messageItem.articleUserId, attention)
     }
   }
 
@@ -53,6 +66,10 @@ export default function MessageItem ({ post }: Props) {
         <div className={style.info}>
           <div className={style.nickName}>
             <div>{messageItem.name}</div>
+            <div
+              onClick={() => toggleFollow()}
+              className={attention ? style.concerned : style.unconcerned}
+            >{attention ? '已关注' : '关注'}</div>
             {messageItem.articleCategoryName
               ? <Tag color="#eb7340" className={style.tag}>{messageItem.articleCategoryName}</Tag>
               : null
@@ -63,7 +80,7 @@ export default function MessageItem ({ post }: Props) {
           </div>
         </div>
       </div>
-      <div className={style.detailText}>
+      <div className={style.detailText} onClick={() => navigator(`/retail?id=${post.articleId}`)}>
         <div className={style.title}>{messageItem.articleTitle}</div>
         <div className={style.content}>{messageItem.articleContent}</div>
       </div>

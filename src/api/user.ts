@@ -112,3 +112,19 @@ export const exitUser = async () => {
     method: 'PUT'
   })
 }
+
+// 查询是否已经关注对方用户
+export const isAttention = async (userId: string) => {
+  return await request<boolean>({
+    url: `/follow/or/not/${userId}`,
+    method: 'GET'
+  })
+}
+
+// 关注或者取关目标用户
+export const toggleAttention = async (userId: string, isFollow: boolean) => {
+  return await request({
+    url: `/follow/${userId}/${isFollow}`,
+    method: 'PUT'
+  })
+}

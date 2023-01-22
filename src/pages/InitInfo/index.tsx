@@ -5,18 +5,16 @@ import { Button, Input, Upload, message, Modal, Radio, RadioChangeEvent, Form } 
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { changePassword, editInfo, getUser, postAvatar } from '../../api/user'
-import { IRecord, IResUserInfo } from '../../libs/model'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { IResUserInfo, resSelfPosts } from '../../libs/model'
+import { useNavigate } from 'react-router-dom'
 import useVerify from '../../hooks/useVerify'
 import { useForm } from 'antd/lib/form/Form'
 import returnIcon from '../../assets/return.svg'
+import topIcon from '../../assets/top.png'
+import bottomIcon from '../../assets/bottom.png'
 import { getSelfPosts } from '../../api/article'
 import MessageItem from '../../components/HomeMiddle/MessageItem'
 // import MessageItem from '../../components/HomeMiddle/MessageItem'
-
-interface IEmail {
-  email: string
-}
 
 export default function InitInfo () {
   const [loading, setLoading] = useState(false)
@@ -31,7 +29,8 @@ export default function InitInfo () {
   const [nick, setNick] = useState(false)
   const [gender, setGender] = useState<0 | 1>()
   const [user, setUser] = useState<IResUserInfo>()
-  const [posts, setPosts] = useState<IRecord[]>([])
+  const [allArticle, setAllArticel] = useState<resSelfPosts>()
+  const [current, setCurrent] = useState(1)
 
   const uploadButton = (
     <div>
@@ -164,7 +163,7 @@ export default function InitInfo () {
     }
   }
 
-  const email = (useLocation().state as IEmail).email
+  const email = localStorage.get("email")
 
   // 获取个人信息 同时刷新
   const getInfo = async () => {
@@ -180,11 +179,49 @@ export default function InitInfo () {
     if (email) {
       const res = await getSelfPosts(email, 1)
       if (res?.data.records) {
-        console.log(res.data.records)
-        setPosts(res?.data.records)
+        setAllArticel(res.data)
+        console.log(res.data)
       }
     }
   }
+
+  const changeCurrent = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    const pages = allArticle?.pages
+    if (!isNaN(Number(value))) {
+      const newVal = Number(value)
+      if (pages) {
+        if (newVal <= pages && newVal >= 1) {
+          setCurrent(newVal)
+        } else if (newVal <= 0) {
+          setCurrent(1)
+        } else if (newVal > pages) {
+          setCurrent(pages)
+        }
+      }
+    }
+  }
+
+  const dePage = () => {
+    if (current > 1) {
+      const val = current - 1
+      setCurrent(val)
+    }
+  }
+
+  const addPage = () => {
+    const pages = allArticle?.pages
+    if (pages) {
+      if (current < pages) {
+        const val = current + 1
+        setCurrent(val)
+      }
+    }
+  }
+
+  useEffect(() => {
+    getPosts()
+  }, [current])
 
   useEffect(() => {
     getInfo()
@@ -247,14 +284,25 @@ export default function InitInfo () {
             </div>
           </div>
         </div>
-        <div className={style.article_box}>
-          {
-            posts.map((post) =>
-              <div key={post.articleId}>
-                <MessageItem post={post}></MessageItem>
-              </div>
-            )
-          }
+        <div className={style.foot}>
+          <div className={style.navPage}>
+            <div className={style.changeBox} onClick={() => dePage()}>
+              <img className={style.changeIcon} src={topIcon}></img>
+            </div>
+            <Input className={style.input} value={current} onChange={(e) => changeCurrent(e) }></Input>
+            <div className={style.changeBox} onClick={() => addPage()}>
+              <img className={style.changeIcon} src={bottomIcon}></img>
+            </div>
+          </div>
+          <div className={style.article_box}>
+            {
+              allArticle?.records.map((post) =>
+                <div key={post.articleId}>
+                  <MessageItem post={post}></MessageItem>
+                </div>
+              )
+            }
+          </div>
         </div>
       </div>
       <Modal title="修改密码"

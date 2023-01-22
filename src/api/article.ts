@@ -1,5 +1,5 @@
 import request from "../utils/request";
-import { INewRes, ICategory, IRecord } from '../libs/model'
+import { INewRes, ICategory, IRecord, resSelfPosts } from '../libs/model'
 // 首页最新文章
 export const LatestArticles = async () => {
   return await request<INewRes>({
@@ -62,15 +62,6 @@ export const getRetailArticle = async (id: string) => {
       id
     }
   })
-}
-
-interface resSelfPosts {
-  countId: string
-  pages: number
-  records: IRecord[]
-  searchCount: boolean
-  size: number
-  total: number
 }
 
 // 查询某用户的所有文章

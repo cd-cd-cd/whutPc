@@ -55,6 +55,7 @@
     width: 100%;
     padding-left: 60px;
     color: #333333;
+    cursor: pointer;
 
     .title {
       color: gray;
@@ -120,4 +121,35 @@
 .hover {
   color: #ff8200;
   cursor: pointer;
+}
+
+@mixin attention {
+  width: 45px;
+  height: 22px;
+  border-radius: 3px;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: gray;
+  font-size: 13px
+}
+
+.unconcerned {
+  @include attention();
+  background-color: #fff;
+  border: 2px solid #ff8200;
+  transition: all 0.3s;
+}
+
+.unconcerned:hover{
+  background-color: #ff8200;
+  color: #fff;
+}
+
+.concerned {
+  @include attention();
+  background-color: #ff8200;
+  color: #fff;
 }
