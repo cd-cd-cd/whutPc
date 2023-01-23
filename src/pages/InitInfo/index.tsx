@@ -163,21 +163,24 @@ export default function InitInfo () {
     }
   }
 
-  const email = localStorage.get("email")
+  const email = localStorage.getItem("email")
 
   // 获取个人信息 同时刷新
   const getInfo = async () => {
-    const res = await getUser(email)
-    if (res) {
-      setUser(res.data)
-      setGender(res.data.sex)
-      setName(res.data.nickName)
+    if (email) {
+      const res = await getUser(email)
+      if (res) {
+        console.log(res.data)
+        setUser(res.data)
+        setGender(res.data.sex)
+        setName(res.data.nickName)
+      }
     }
   }
 
   const getPosts = async () => {
     if (email) {
-      const res = await getSelfPosts(email, 1)
+      const res = await getSelfPosts(email, current)
       if (res?.data.records) {
         setAllArticel(res.data)
         console.log(res.data)
@@ -289,7 +292,7 @@ export default function InitInfo () {
             <div className={style.changeBox} onClick={() => dePage()}>
               <img className={style.changeIcon} src={topIcon}></img>
             </div>
-            <Input className={style.input} value={current} onChange={(e) => changeCurrent(e) }></Input>
+            <Input className={style.input} value={current} onChange={(e) => changeCurrent(e)}></Input>
             <div className={style.changeBox} onClick={() => addPage()}>
               <img className={style.changeIcon} src={bottomIcon}></img>
             </div>

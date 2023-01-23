@@ -1,3 +1,4 @@
+import { message } from "antd"
 import { isAttention, toggleAttention } from "../api/user"
 
 export default function useItems () {
@@ -10,11 +11,10 @@ export default function useItems () {
   }
 
   // 关注&取消关注
-
   const toggleConcerned = async (userId: string, isFollow: boolean) => {
     const res = await toggleAttention(userId, isFollow)
     if (res) {
-      console.log(res)
+      message.success(res.data)
     }
   }
   return {

@@ -49,9 +49,12 @@ export default function MessageItem ({ post }: Props) {
   // 关注&取消关注
   const toggleFollow = async () => {
     if (typeof attention !== 'undefined') {
-      toggleConcerned(messageItem.articleUserId, attention)
+      toggleConcerned(messageItem.articleUserId, !attention)
+      getArticle()
     }
   }
+
+  const email = localStorage.getItem("email")
 
   useEffect(() => {
     getArticle()
@@ -66,10 +69,12 @@ export default function MessageItem ({ post }: Props) {
         <div className={style.info}>
           <div className={style.nickName}>
             <div>{messageItem.name}</div>
-            <div
+            {
+              messageItem.articleUserId !== email ? <div
               onClick={() => toggleFollow()}
               className={attention ? style.concerned : style.unconcerned}
-            >{attention ? '已关注' : '关注'}</div>
+            >{attention ? '已关注' : '关注'}</div> : null
+            }
             {messageItem.articleCategoryName
               ? <Tag color="#eb7340" className={style.tag}>{messageItem.articleCategoryName}</Tag>
               : null

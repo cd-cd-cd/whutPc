@@ -123,7 +123,7 @@ export const isAttention = async (userId: string) => {
 
 // 关注或者取关目标用户
 export const toggleAttention = async (userId: string, isFollow: boolean) => {
-  return await request({
+  return await request<string>({
     url: `/follow/${userId}/${isFollow}`,
     method: 'PUT'
   })
