@@ -1,0 +1,31 @@
+.FirstCommentBack{
+  font-size: 12px;
+  display: flex;
+  flex-direction: row;
+  margin: 5px 3px;
+}
+
+.avatar_box {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+
+  .avatar_img {
+    width: 30px;
+    border-radius: 50%;
+  }
+}
+
+.name{
+  color: #FF8300;
+  margin-right: 3px;
+}
+
+.main{
+  display: flex;
+  flex-direction: row;
+}
+
+.time{
+  color: #939393;
+}

@@ -59,3 +59,27 @@ export interface resSelfPosts {
   size: number
   total: number
 }
+
+export interface IFirstComment {
+  avatar: string
+  firstCommentArticleId: number
+  firstCommentContent: string
+  firstCommentCount: number
+  firstCommentCreatedTime: Date
+  firstCommentId: number
+  firstCommentLikeCount: number
+  firstCommentUserId: string
+  liked: boolean
+  name: string
+}
+
+export interface IResFirstCommentList {
+  countId: string
+  current: number
+  maxLimit: string
+  pages: number
+  records: IFirstComment[]
+  searchCount: boolean
+  size: number
+  total: number
+}
