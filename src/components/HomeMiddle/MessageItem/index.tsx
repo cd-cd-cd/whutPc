@@ -120,6 +120,7 @@ export default function MessageItem ({ post }: Props) {
       getFirstCommentBaseTime()
     }
   }, [commentRule])
+
   useEffect(() => {
     getArticle()
     getAvatar()
@@ -223,16 +224,16 @@ export default function MessageItem ({ post }: Props) {
               <div
               className={commentRule === 'LIKENUM' ? style.rule_box_click : style.rule_box}
               onClick={() => setCommentRule('LIKENUM')}
-              >按点赞</div>
+              >最热</div>
               <div
               className={commentRule === 'TIME' ? style.rule_box_click : style.rule_box}
               onClick={() => setCommentRule('TIME')}
-              >按时间</div>
+              >最新</div>
             </div>
             <div className={style.firstCommentBox}>
               {
                 FirstCommentLists?.map((item) => <FirstComment
-                key={item.firstCommentArticleId}
+                key={item.firstCommentId}
                 FirstCommentMsg={item}
                 ></FirstComment>)
               }

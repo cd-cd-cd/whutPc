@@ -109,3 +109,11 @@ export const accordTime = async (articleId: string) => {
     }
   })
 }
+
+// 一级评论点赞
+export const FirstCommentLike = async (id: string) => {
+  return await request({
+    url: `/firstComment/like/${id}`,
+    method: 'PUT'
+  })
+}
