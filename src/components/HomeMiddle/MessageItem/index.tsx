@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import style from './index.module.scss'
 import dayjs from 'dayjs'
-import { Input, message } from 'antd'
+import { Input, message, Tag } from 'antd'
 import eyeIcon from '../../../assets/eye_gray.png'
 import eyeHover from '../../../assets/eye_orange.png'
 import heartIcon from '../../../assets/heart_gray.png'
@@ -116,6 +116,10 @@ export default function MessageItem ({ post }: Props) {
         <div className={style.info}>
           <div className={style.nickName}>
             <div>{post.name}</div>
+            {post.articleCategoryName
+              ? <Tag color="#eb7340" className={style.tag}>{post.articleCategoryName}</Tag>
+              : null
+            }
             {/* {
               post.articleUserId !== email ? <div
                 onClick={() => { toggleFollow(); getArticles ? getArticles(ruleType, categoryId) : null }}
