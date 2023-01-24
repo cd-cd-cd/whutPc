@@ -133,13 +133,14 @@ export const FirstCommentDetail = async (id: number) => {
 }
 
 // 发送二级评论
-export const sendSecond = async (firstCommentArticleId: number, firstCommentContent: string) => {
+export const sendSecond = async (sonCommentContent: string, sonCommentParentId: number, sonCommentReplyId: string) => {
   return await request({
     url: '/sonComment/create',
     method: 'POST',
     data: {
-      firstCommentArticleId,
-      firstCommentContent
+      sonCommentContent,
+      sonCommentParentId,
+      sonCommentReplyId
     }
   })
 }

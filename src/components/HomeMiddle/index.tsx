@@ -25,10 +25,6 @@ export default function HomeMiddle () {
     getArticles(ruleType, categoryId)
   }, [ruleType, categoryId])
 
-  useEffect(() => {
-    getArticles(ruleType, categoryId)
-  }, [])
-
   return (
     <div className={style.mid}>
       <div className={style.box}>

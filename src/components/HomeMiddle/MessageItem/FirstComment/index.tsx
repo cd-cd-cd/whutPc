@@ -35,7 +35,7 @@ export default function FirstComment ({ firstCommentId }: Props) {
     console.log(sendMsg)
     if (sendMsg.length > 0 && sendMsg.length <= 255) {
       if (msg?.firstCommentId) {
-        const res = await sendSecond(msg?.firstCommentId, sendMsg)
+        const res = await sendSecond(sendMsg, msg?.firstCommentId, '')
         console.log(res)
         setIsModalOpen(false)
         setSendMsg('')
