@@ -72,7 +72,6 @@ export default function PublicArticle () {
   const createPost = async () => {
     // 假设没有照片
     const { articleCategoryId, articleContent, articleTitle } = article
-    console.log(article)
     if (articleCategoryId < 0) {
       message.info('请选择发布类别')
     } else if (articleContent.length === 0) {
@@ -88,6 +87,9 @@ export default function PublicArticle () {
           lastArticle()
         }
         message.success('发布成功')
+        setPutVisible(false)
+      } else {
+        message.error(res?.errorMsg as string)
       }
     }
   }

@@ -84,6 +84,8 @@ export default function MessageItem ({ post }: Props) {
         }
         message.success('评论成功')
         setFirstComment('')
+      } else {
+        message.error(res?.errorMsg as string)
       }
     }
   }

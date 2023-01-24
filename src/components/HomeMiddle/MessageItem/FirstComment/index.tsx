@@ -26,8 +26,6 @@ export default function FirstComment ({ firstCommentId }: Props) {
   const pushLike = async () => {
     const res = await FirstCommentLike(firstCommentId.toString())
     if (res?.code === 200) {
-      console.log('点赞成功')
-      // 刷新
       getFirstComment()
     }
   }
@@ -84,7 +82,7 @@ export default function FirstComment ({ firstCommentId }: Props) {
                   className={style.icon}
                   onClick={() => pushLike()}
                 ></img>
-                <span className={style.num_click}>{msg ? msg.firstCommentCount : null}</span>
+                <span className={style.num_click}>{msg?.firstCommentLikeCount}</span>
               </div>
                 : <div className={style.likeIcon}
                   onMouseOver={() => { setLike(true) }}
@@ -95,7 +93,7 @@ export default function FirstComment ({ firstCommentId }: Props) {
                     className={style.icon}
                     onClick={() => pushLike()}
                   ></img>
-                  <span className={style.num}>{msg ? msg.firstCommentCount : null}</span>
+                  <span className={style.num}>{msg?.firstCommentLikeCount}</span>
                 </div>
             }
           </div>
