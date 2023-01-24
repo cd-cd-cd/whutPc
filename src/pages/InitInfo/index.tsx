@@ -14,7 +14,6 @@ import topIcon from '../../assets/top.png'
 import bottomIcon from '../../assets/bottom.png'
 import { getSelfPosts } from '../../api/article'
 import MessageItem from '../../components/HomeMiddle/MessageItem'
-// import MessageItem from '../../components/HomeMiddle/MessageItem'
 
 export default function InitInfo () {
   const [loading, setLoading] = useState(false)

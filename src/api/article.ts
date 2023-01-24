@@ -1,5 +1,5 @@
 import request from "../utils/request";
-import { INewRes, ICategory, IRecord, resSelfPosts, IResFirstCommentList } from '../libs/model'
+import { INewRes, ICategory, IRecord, resSelfPosts, IResFirstCommentList, IFirstComment } from '../libs/model'
 // 首页最新文章
 export const LatestArticles = async (category?: number) => {
   return await request<INewRes>({
@@ -121,5 +121,25 @@ export const FirstCommentLike = async (id: string) => {
   return await request({
     url: `/firstComment/like/${id}`,
     method: 'PUT'
+  })
+}
+
+// 查询一级评论详细信息
+export const FirstCommentDetail = async (id: number) => {
+  return await request<IFirstComment>({
+    url: `/firstComment/detail/${id}`,
+    method: 'GET'
+  })
+}
+
+// 发送二级评论
+export const sendSecond = async (firstCommentArticleId: number, firstCommentContent: string) => {
+  return await request({
+    url: '/sonComment/create',
+    method: 'POST',
+    data: {
+      firstCommentArticleId,
+      firstCommentContent
+    }
   })
 }
