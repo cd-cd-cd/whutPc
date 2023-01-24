@@ -19,11 +19,15 @@ export default function HomeLeft () {
 
   return (
     <div className={style.left}>
+      <div
+        className={categoryId === -1 ? style.item_click : style.item}
+        onClick={() => { setCategoryId(-1) }}
+      >整体</div>
       {
         categoryArrays?.map((item) =>
           <div key={item.categoryId}
-          className={item.categoryId === categoryId ? style.item_click : style.item}
-          onClick={() => { setCategoryId(item.categoryId) }}
+            className={item.categoryId === categoryId ? style.item_click : style.item}
+            onClick={() => { setCategoryId(item.categoryId) }}
           >{item.categoryName}</div>
         )
       }

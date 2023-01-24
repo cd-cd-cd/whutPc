@@ -1,18 +1,24 @@
 import request from "../utils/request";
 import { INewRes, ICategory, IRecord, resSelfPosts, IResFirstCommentList } from '../libs/model'
 // 首页最新文章
-export const LatestArticles = async () => {
+export const LatestArticles = async (category?: number) => {
   return await request<INewRes>({
     url: '/article/new',
-    method: 'GET'
+    method: 'GET',
+    params: {
+      category
+    }
   })
 }
 
 // 得到点赞最多十条
-export const HottestArticles = async () => {
+export const HottestArticles = async (category?: number) => {
   return await request<INewRes>({
     url: '/article/hot',
-    method: 'GET'
+    method: 'GET',
+    params: {
+      category
+    }
   })
 }
 

@@ -3,17 +3,27 @@ import { HottestArticles, LatestArticles } from "../api/article"
 import { context } from "./store"
 
 export default function usePostArray () {
-  const { setPostList } = useContext(context)
+  const { setPostList, categoryId } = useContext(context)
   // 展示最新文章
   const lastArticle = async () => {
-    const res = await LatestArticles()
+    let res
+    if (categoryId < 0) {
+      res = await LatestArticles()
+    } else {
+      res = await LatestArticles(categoryId)
+    }
     if (res) {
       setPostList(res.data.records)
     }
   }
   // 展示最热文章
   const hotArticle = async () => {
-    const res = await HottestArticles()
+    let res
+    if (categoryId < 0) {
+      res = await HottestArticles()
+    } else {
+      res = await HottestArticles(categoryId)
+    }
     if (res) {
       setPostList(res.data.records)
     }

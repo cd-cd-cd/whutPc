@@ -220,21 +220,24 @@ export default function MessageItem ({ post }: Props) {
               <Input.TextArea placeholder='发布你的评论' className={style.send_input} value={firstComment} onChange={(e) => setFirstComment(e.target.value)} />
               <div className={firstComment ? style.send_btn : style.send_btn_dis} onClick={() => sendCommentone()}>评论</div>
             </div>
-            <div className={style.rule}>
-              <div
-              className={commentRule === 'LIKENUM' ? style.rule_box_click : style.rule_box}
-              onClick={() => setCommentRule('LIKENUM')}
-              >最热</div>
-              <div
-              className={commentRule === 'TIME' ? style.rule_box_click : style.rule_box}
-              onClick={() => setCommentRule('TIME')}
-              >最新</div>
-            </div>
+            {
+              FirstCommentLists?.length !== 0
+                ? <div className={style.rule}>
+                  <div
+                    className={commentRule === 'LIKENUM' ? style.rule_box_click : style.rule_box}
+                    onClick={() => setCommentRule('LIKENUM')}
+                  >最热</div>
+                  <div
+                    className={commentRule === 'TIME' ? style.rule_box_click : style.rule_box}
+                    onClick={() => setCommentRule('TIME')}
+                  >最新</div>
+                </div> : null
+            }
             <div className={style.firstCommentBox}>
               {
                 FirstCommentLists?.map((item) => <FirstComment
-                key={item.firstCommentId}
-                FirstCommentMsg={item}
+                  key={item.firstCommentId}
+                  FirstCommentMsg={item}
                 ></FirstComment>)
               }
             </div>

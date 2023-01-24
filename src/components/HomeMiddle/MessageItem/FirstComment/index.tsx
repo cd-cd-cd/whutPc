@@ -49,7 +49,7 @@ export default function FirstComment ({ FirstCommentMsg }: Props) {
                   className={style.icon}
                   onClick={() => pushLike()}
                 ></img>
-                <span className={style.num}>{FirstCommentMsg.firstCommentCount}</span>
+                <span className={style.num_click}>{FirstCommentMsg.firstCommentCount}</span>
               </div>
                 : <div className={style.likeIcon}
                   onMouseOver={() => { setLike(true) }}

@@ -10,7 +10,7 @@ import usePostArray from '../../../hooks/usePostArray'
 // import { category } from '../../../api/article'
 
 export default function PublicArticle () {
-  const { categoryArrays, categoryId, ruleType } = useContext(context)
+  const { categoryArrays, ruleType } = useContext(context)
   const { lastArticle } = usePostArray()
   const [article, setArticle] = useState<IArticle>({ articleCategoryId: -1, articleContent: '', articleTitle: '' })
   const [putVisible, setPutVisible] = useState(false)
@@ -84,7 +84,7 @@ export default function PublicArticle () {
     } else {
       const res = await postArticle(articleCategoryId, articleContent, articleTitle)
       if (res?.code === 200) {
-        if (categoryId < 0 && ruleType === 'lasted') {
+        if (ruleType === 'lasted') {
           lastArticle()
         }
         message.success('发布成功')

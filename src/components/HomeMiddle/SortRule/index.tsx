@@ -3,15 +3,15 @@ import style from './index.module.scss'
 import { context } from '../../../hooks/store'
 
 export default function SortRule () {
-  const { setCategoryId, ruleType, setRuleType } = useContext(context)
+  const { ruleType, setRuleType } = useContext(context)
   return (
     <div className={style.back}>
       <div
-        onClick={() => { setCategoryId(-1); setRuleType('lasted') }}
+        onClick={() => { setRuleType('lasted') }}
         className={ruleType === 'lasted' ? style.click : style.normal}
       >最新</div>
       <div
-        onClick={() => { setCategoryId(-1); setRuleType('hottest') }}
+        onClick={() => { setRuleType('hottest') }}
         className={ruleType === 'hottest' ? style.click : style.normal}
       >最热</div>
     </div>
