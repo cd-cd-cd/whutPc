@@ -1,4 +1,4 @@
-.FirstCommentBack{
+.FirstCommentBack {
   font-size: 12px;
   display: flex;
   flex-direction: row;
@@ -16,34 +16,34 @@
   }
 }
 
-.name{
+.name {
   color: #FF8300;
   margin-right: 3px;
 }
 
-.main{
+.main {
   display: flex;
   flex-direction: row;
 }
 
-.time{
+.time {
   color: #939393;
 }
 
-.func{
+.func {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.func_box{
+.func_box {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
-.likeIcon{
+.likeIcon {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -53,16 +53,17 @@
   color: gray;
 }
 
-.icon{
+.icon {
   width: 15px;
   height: 15px;
   cursor: pointer;
 }
-.main_box{
+
+.main_box {
   width: 100%;
 }
 
-.num{
+.num {
   margin-left: 3px;
   margin-top: 2px;
 }
@@ -73,6 +74,17 @@
   color: #FF8300;
 }
 
-.likeIcon:hover{
+.likeIcon:hover {
   color: #FF8300;
+}
+
+.downBox {
+  display: flex;
+  flex-direction: row;
+}
+
+.downIcon {
+  width: 14px;
+  margin-left: 2px;
+  cursor: pointer;
 }

@@ -7,6 +7,7 @@ import SortRule from './SortRule'
 import PublicArticle from './PublicArticle'
 import { rule } from '../../libs/model'
 import usePostArray from '../../hooks/usePostArray'
+import qqIcon from '../../assets/qq.png'
 
 export default function HomeMiddle () {
   const { categoryId, ruleType, PostList } = useContext(context)
@@ -38,6 +39,7 @@ export default function HomeMiddle () {
           )
         }
       </div>
+      <img src={qqIcon} className={style.qqIcon}></img>
     </div>
   )
 }

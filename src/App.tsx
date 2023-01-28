@@ -29,7 +29,7 @@ function App () {
         <Routes>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/register' element={<Register />}></Route>
-          <Route path='/init' element={<InitInfo />}></Route>
+          <Route path='/homePage' element={<InitInfo />}></Route>
           <Route path='/home' element={<Home />}></Route>
           <Route path='/Retail' element={<RetailArticle/>}></Route>
           {/* <Route path='*' element={<Navigate to='/register'/>}></Route> */}

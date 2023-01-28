@@ -1,5 +1,5 @@
 import request from "../utils/request";
-import { INewRes, ICategory, IRecord, resSelfPosts, IResFirstCommentList, IFirstComment } from '../libs/model'
+import { INewRes, ICategory, IRecord, resSelfPosts, IResFirstCommentList, IFirstComment, ISonRes, ISecondComment } from '../libs/model'
 // 首页最新文章
 export const LatestArticles = async (category?: number) => {
   return await request<INewRes>({
@@ -133,7 +133,7 @@ export const FirstCommentDetail = async (id: number) => {
 }
 
 // 发送二级评论
-export const sendSecond = async (sonCommentContent: string, sonCommentParentId: number, sonCommentReplyId: string) => {
+export const sendSecond = async (sonCommentContent: string, sonCommentParentId: number, sonCommentReplyId?: string) => {
   return await request({
     url: '/sonComment/create',
     method: 'POST',
@@ -142,5 +142,26 @@ export const sendSecond = async (sonCommentContent: string, sonCommentParentId: 
       sonCommentParentId,
       sonCommentReplyId
     }
+  })
+}
+
+// 查询父级评论对应的子级评论
+export const getSonMsg = async (firstCommentId: number, current: number) => {
+  return await request<ISonRes>({
+    url: '/sonComment/getList',
+    method: 'GET',
+    params: {
+      firstCommentId,
+      current
+    }
+  })
+}
+
+// 查询二级评论详细信息
+
+export const getDetailSonMsg = async (id: number) => {
+  return await request<ISecondComment>({
+    url: `/sonComment/detail/${id}`,
+    method: 'GET'
   })
 }

@@ -44,7 +44,7 @@ export default function HomeHeader () {
               </div>
               <div>{user?.nickName}</div>
             </div>
-            <div className={style.block} onClick={() => navigator('/init')}>个人中心</div>
+            <div className={style.block} onClick={() => navigator('/homePage')}>个人中心</div>
             <div className={style.block} onClick={() => exit()}>退出</div>
           </div>
           : <div className={style.imLogin}>

@@ -56,6 +56,11 @@ function handleErrorCode (status: number, stat: string, msg: string) {
       message.error(msg)
       return Promise.reject(stat)
     }
+    case 401: {
+      message.error('登录失效，请重新登录')
+      location.reload()
+      return Promise.reject(stat)
+    }
     default: {
       message.error('请求出错')
       return Promise.reject(stat)

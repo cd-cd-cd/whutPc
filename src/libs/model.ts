@@ -83,3 +83,29 @@ export interface IResFirstCommentList {
   size: number
   total: number
 }
+
+export interface ISecondComment {
+  commentReplyAvatar: string | null
+  commentReplyName: string | null
+  commentUserAvatar: string
+  commentUserName: string
+  liked: boolean
+  sonCommentContent: string
+  sonCommentCreatedTime: string
+  sonCommentId: number
+  sonCommentLikeCount: number
+  sonCommentParentId: number
+  sonCommentReplyUserId: number | null
+  sonCommentUserId: string
+}
+
+export interface ISonRes {
+  countId: string
+  current: number
+  maxLimit: string
+  pages: number
+  records: ISecondComment[]
+  searchCount: boolean
+  size: number
+  total: number
+}

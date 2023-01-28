@@ -125,10 +125,6 @@ export default function MessageItem ({ post }: Props) {
                 onClick={() => { toggleFollow(); getArticles ? getArticles(ruleType, categoryId) : null }}
                 className={attention ? style.concerned : style.unconcerned}
               >{attention ? '已关注' : '关注'}</div> : null
-            }
-            {post.articleCategoryName
-              ? <Tag color="#eb7340" className={style.tag}>{post.articleCategoryName}</Tag>
-              : null
             } */}
           </div>
           <div className={style.time}>

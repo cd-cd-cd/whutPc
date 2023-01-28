@@ -1,0 +1,50 @@
+.secondName {
+  color: rgb(235,115,64);
+  margin-right: 2px;
+}
+
+.secondTime {
+  color: #939393;
+}
+
+.funcSecond{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .func_box{
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+.likeIcon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  margin-top: -4px;
+  color: gray;
+}
+
+.icon {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.num {
+  margin-left: 3px;
+  margin-top: 2px;
+}
+
+.num_click {
+  margin-left: 3px;
+  margin-top: 2px;
+  color: #FF8300;
+}
+
+.likeIcon:hover {
+  color: #FF8300;
+}
