@@ -9,7 +9,6 @@ import { IResUserInfo, resSelfPosts } from '../../libs/model'
 import { useNavigate } from 'react-router-dom'
 import useVerify from '../../hooks/useVerify'
 import { useForm } from 'antd/lib/form/Form'
-import returnIcon from '../../assets/return.svg'
 import topIcon from '../../assets/top.png'
 import bottomIcon from '../../assets/bottom.png'
 import { getSelfPosts } from '../../api/article'
@@ -231,9 +230,6 @@ export default function InitInfo () {
   }, [])
   return (
     <div className={style.init}>
-      <div className={style.nav}>
-        <img src={returnIcon} className={style.returnIcon} onClick={() => navigator(-1)}></img>
-      </div>
       <div className={style.main}>
         <div className={style.info}>
           <div className={style.left_box}>

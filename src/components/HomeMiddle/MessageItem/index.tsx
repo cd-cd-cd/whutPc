@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './index.module.scss'
 import dayjs from 'dayjs'
 import { Input, message, Tag } from 'antd'
@@ -13,6 +13,7 @@ import { accordLikeNum, accordTime, sendFirstComment, toggleLike } from '../../.
 import { useNavigate } from 'react-router-dom'
 // import { getUser } from '../../../api/user'
 import FirstComment from './FirstComment'
+import { getUser } from '../../../api/user'
 // import defaultImg  from '../.././../assets/'
 
 interface Props {
@@ -26,6 +27,8 @@ export default function MessageItem ({ post }: Props) {
   const [eye, setEye] = useState(false)
   const [heart, setHeart] = useState(false)
   const [comment, setComment] = useState(false)
+
+  const [avatar, setAvatar] = useState<string>()
 
   // 记录点赞
   const [isLike, setIsLike] = useState<boolean>(post.liked)
@@ -107,6 +110,27 @@ export default function MessageItem ({ post }: Props) {
     getFirstCommentBaseLikeNum()
   }
 
+  // 得到个人信息
+  const getPerAVatar = async () => {
+    const email = localStorage.getItem('email')
+    if (email) {
+      const res = await getUser(email)
+      setAvatar(res?.data.avatar)
+    }
+  }
+
+  const transNav = () => {
+    const email = localStorage.getItem('email')
+    if (email !== post.articleUserId) {
+      window.open(`/page/${post.articleUserId}`)
+    } else {
+      window.open('/homePage')
+    }
+  }
+
+  useEffect(() => {
+    getPerAVatar()
+  }, [])
   return (
     <div className={style.itemBox}>
       <div className={style.itemHeader}>
@@ -114,7 +138,7 @@ export default function MessageItem ({ post }: Props) {
           <img className={style.avatarImg} src={post.avatar}></img>
         </div>
         <div className={style.info}>
-          <div className={style.nickName}>
+          <div className={style.nickName} onClick={() => transNav()}>
             <div>{post.name}</div>
             {post.articleCategoryName
               ? <Tag color="#eb7340" className={style.tag}>{post.articleCategoryName}</Tag>
@@ -196,7 +220,7 @@ export default function MessageItem ({ post }: Props) {
           ? <div>
             <div className={style.review_box}>
               <div className={style.avatar2_box}>
-                <img className={style.avatar2} src={post.avatar}></img>
+                <img className={style.avatar2} src={avatar}></img>
               </div>
               <Input.TextArea placeholder='发布你的评论' className={style.send_input} value={firstComment} onChange={(e) => setFirstComment(e.target.value)} />
               <div className={firstComment ? style.send_btn : style.send_btn_dis} onClick={() => sendCommentone()}>评论</div>
