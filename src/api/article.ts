@@ -158,10 +158,17 @@ export const getSonMsg = async (firstCommentId: number, current: number) => {
 }
 
 // 查询二级评论详细信息
-
 export const getDetailSonMsg = async (id: number) => {
   return await request<ISecondComment>({
     url: `/sonComment/detail/${id}`,
     method: 'GET'
+  })
+}
+
+// 给二级评论点赞或取消
+export const toggleSecondLike = async (id: number) => {
+  return await request({
+    url: `/sonComment/like/${id}`,
+    method: 'PUT'
   })
 }

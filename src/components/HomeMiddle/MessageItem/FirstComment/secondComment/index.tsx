@@ -1,43 +1,38 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import style from './index.module.scss'
 import commentIcon from '../../../../../assets/comment_gray.png'
 import commentHover from '../../../../../assets/comment_orange.png'
 import likeIcon from '../../../../../assets/heart_gray.png'
 import likeHover from '../../../../../assets/heart_orange.png'
 import { ISecondComment } from '../../../../../libs/model'
-import { getDetailSonMsg } from '../../../../../api/article'
 import { Input, message, Modal } from 'antd'
 import dayjs from 'dayjs'
+import { sendSecond } from '../../../../../api/article'
 interface Props {
-  id: number
+  post: ISecondComment
+  getSon: () => {}
 }
-export default function SecondComment ({ id }: Props) {
+export default function SecondComment ({ post, getSon }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [comment, setComment] = useState(false)
   const [like, setLike] = useState(false)
-  const [msg, setMsg] = useState<ISecondComment>()
   // 保存发布的评论
   const [sendMsg, setSendMsg] = useState('')
 
-  const getMsg = async () => {
-    const res = await getDetailSonMsg(id)
-    setMsg(res?.data)
-    console.log(res?.data)
-  }
-
   const handleOk = async () => {
-    console.log(sendMsg)
     if (sendMsg.length > 0 && sendMsg.length <= 255) {
-      // if (msg?.firstCommentId) {
-      //   const res = await sendSecond(sendMsg, msg?.firstCommentId)
-      //   if (res?.code === 200) {
-      //     setIsModalOpen(false)
-      //     setSendMsg('')
-      //     message.success('评论成功')
-      //   } else {
-      //     message.info('评论失败，请稍后再试')
-      //   }
-      // }
+      let res
+      if (post.commentUserName) {
+        res = await sendSecond(sendMsg, post.sonCommentParentId, post.sonCommentUserId.toString())
+      } else {
+        res = await sendSecond(sendMsg, post.sonCommentParentId)
+      }
+      if (res?.code === 200) {
+        setIsModalOpen(false)
+        setSendMsg('')
+        message.success('评论成功')
+        getSon()
+      }
     } else {
       message.info('评论字数在255之内')
     }
@@ -48,17 +43,29 @@ export default function SecondComment ({ id }: Props) {
     setIsModalOpen(false)
   }
 
-  useEffect(() => {
-    getMsg()
-  }, [])
+  const email = localStorage.getItem('email')!
+
+  const transNav = (id: string, toId?: string) => {
+    console.log(id !== post.sonCommentUserId, id, post.sonCommentUserId)
+    if (id !== post.sonCommentUserId) {
+      window.open(`/page/${toId}`)
+    } else {
+      window.open('/homePage')
+    }
+  }
   return (
     <div>
       <div>
-        <span className={style.secondName}>{msg?.commentUserName}:</span>
-        <span>{msg?.sonCommentContent}</span>
+        <span className={style.secondName}>
+        <span className={style.name} onClick={() => transNav(email, post.sonCommentUserId)}>{post.commentUserName}</span>
+        {
+          post.commentReplyName ? <span><span>回复</span><span className={style.name} onClick={() => transNav(email, post.sonCommentReplyUserId?.toString())}>@{post.commentReplyName}</span></span> : null
+        }
+        :</span>
+        <span>{post.sonCommentContent}</span>
       </div>
       <div className={style.funcSecond}>
-        <div className={style.secondTime}>{dayjs(msg?.sonCommentCreatedTime).format('YYYY-MM-DD HH:mm:ss')}</div>
+        <div className={style.secondTime}>{dayjs(post.sonCommentCreatedTime).format('YYYY-MM-DD HH:mm:ss')}</div>
         <div className={style.func_box}>
           <img
             onClick={() => setIsModalOpen(true)}
@@ -68,14 +75,14 @@ export default function SecondComment ({ id }: Props) {
             onMouseOut={() => { setComment(false) }}
           ></img>
           {
-            (msg ? msg.liked : null) ? <div className={style.likeIcon}>
+              post.liked ? <div className={style.likeIcon}>
               <img
                 src={likeHover}
                 className={style.icon}
               ></img>
-              <span className={style.num_click}>{msg?.sonCommentLikeCount}</span>
+              <span className={style.num_click}>{post.sonCommentLikeCount}</span>
             </div>
-              : <div className={style.likeIcon}
+                : <div className={style.likeIcon}
                 onMouseOver={() => { setLike(true) }}
                 onMouseOut={() => { setLike(false) }}
               >
@@ -83,12 +90,12 @@ export default function SecondComment ({ id }: Props) {
                   src={like ? likeHover : likeIcon}
                   className={style.icon}
                 ></img>
-                <span className={style.num}>{msg?.sonCommentLikeCount}</span>
+                <span className={style.num}>{post.sonCommentLikeCount}</span>
               </div>
           }
         </div>
         <Modal
-          title={`回复@${msg?.commentReplyName}`}
+          title={`回复@${post.commentUserName}`}
           okText='发布'
           cancelText='取消'
           open={isModalOpen}

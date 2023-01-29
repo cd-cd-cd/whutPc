@@ -109,3 +109,5 @@ export interface ISonRes {
   size: number
   total: number
 }
+
+export type ICommentRule = 'TIME' | 'LIKENUM'

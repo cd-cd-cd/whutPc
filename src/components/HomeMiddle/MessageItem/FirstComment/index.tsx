@@ -1,53 +1,63 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import style from './index.module.scss'
 import dayjs from 'dayjs'
-import { IFirstComment, ISecondComment } from '../../../../libs/model'
+import { ICommentRule, IFirstComment, ISecondComment } from '../../../../libs/model'
 import commentIcon from '../../../../assets/comment_gray.png'
 import commentHover from '../../../../assets/comment_orange.png'
 import likeIcon from '../../../../assets/heart_gray.png'
 import likeHover from '../../../../assets/heart_orange.png'
 import downIcon from '../../../../assets/down.png'
-import { FirstCommentDetail, FirstCommentLike, getSonMsg, sendSecond } from '../../../../api/article'
+import { FirstCommentLike, getSonMsg, sendSecond } from '../../../../api/article'
 import { Input, message, Modal } from 'antd'
 import SecondComment from './secondComment'
 interface Props {
-  firstCommentId: number
+  item: IFirstComment,
+  commentRule: ICommentRule,
+  getFirstCommentBaseLikeNum: () => {}
+  getFirstCommentBaseTime: () => {}
 }
-export default function FirstComment ({ firstCommentId }: Props) {
+export default function FirstComment ({ item, commentRule, getFirstCommentBaseLikeNum, getFirstCommentBaseTime }: Props) {
   const [like, setLike] = useState(false)
   const [comment, setComment] = useState(false)
-  const [msg, setMsg] = useState<IFirstComment>()
+  // 记录点赞
+  const [isLike, setIsLike] = useState<boolean>(item.liked)
+  // 记录点赞数
+  const [likeNum, setLikeNum] = useState<number>(item.firstCommentLikeCount)
   const [fold, setFold] = useState<boolean>(true)
   // 保存发布的评论
   const [sendMsg, setSendMsg] = useState('')
   // 保存二级评论
   const [msg2, setMsg2] = useState<ISecondComment[]>([])
-  // 得到当前一级评论
-  const getFirstComment = async () => {
-    const res = await FirstCommentDetail(firstCommentId)
-    console.log(res?.data)
-    setMsg(res?.data)
+  // 更新父级
+  const refresh = () => {
+    if (commentRule === 'TIME') {
+      getFirstCommentBaseTime()
+    } else if (commentRule === 'LIKENUM') {
+      getFirstCommentBaseLikeNum()
+    }
   }
-
   const pushLike = async () => {
-    const res = await FirstCommentLike(firstCommentId.toString())
+    const res = await FirstCommentLike(item.firstCommentId.toString())
     if (res?.code === 200) {
-      getFirstComment()
+      if (!isLike) {
+        setLikeNum(likeNum + 1)
+      } else {
+        setLikeNum(likeNum - 1)
+      }
+      setIsLike(!isLike)
     }
   }
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleOk = async () => {
-    console.log(sendMsg)
     if (sendMsg.length > 0 && sendMsg.length <= 255) {
-      if (msg?.firstCommentId) {
-        const res = await sendSecond(sendMsg, msg?.firstCommentId)
+      if (item.firstCommentId) {
+        const res = await sendSecond(sendMsg, item.firstCommentId)
         if (res?.code === 200) {
           setIsModalOpen(false)
           setSendMsg('')
           message.success('评论成功')
-        } else {
-          message.info('评论失败，请稍后再试')
+          refresh()
         }
       }
     } else {
@@ -60,37 +70,45 @@ export default function FirstComment ({ firstCommentId }: Props) {
     setIsModalOpen(false)
   }
 
-  const unfoldMsg = async () => {
-    console.log(fold)
+  const unfoldMsg = () => {
     if (fold) {
-      if (msg?.firstCommentId) {
-        const res = await getSonMsg(msg?.firstCommentId, 1)
-        console.log(res?.data.records)
-        if (res?.data) {
-          setMsg2(res.data.records)
-        }
-      }
+      getSon()
     }
     setFold(!fold)
   }
 
-  useEffect(() => {
-    getFirstComment()
-  }, [])
+  const getSon = async () => {
+    if (item.firstCommentId) {
+      const res = await getSonMsg(item.firstCommentId, 1)
+      if (res?.data) {
+        console.log(res.data.records)
+        setMsg2(res.data.records)
+      }
+    }
+  }
+
+  const transNav = () => {
+    const email = localStorage.getItem('email')
+    if (email !== item.firstCommentUserId) {
+      window.open(`/page/${item.firstCommentUserId}`)
+    } else {
+      window.open('/homePage')
+    }
+  }
   return (
     <div className={style.FirstCommentBack}>
       <div className={style.avatar_box}>
-        <img src={msg ? msg.avatar : ''} className={style.avatar_img}></img>
+        <img src={item.avatar} className={style.avatar_img}></img>
       </div>
       <div className={style.main_box}>
         <div className={style.main}>
-          <span className={style.name}>{msg ? msg.name : null}</span>
+          <span className={style.name} onClick={() => transNav()}>{item.name}</span>
           <div>
-            : {msg ? msg.firstCommentContent : null}
+            : {item.firstCommentContent}
           </div>
         </div>
         <div className={style.func}>
-          <div className={style.time}>{dayjs(msg ? msg.firstCommentCreatedTime : null).format('YYYY-MM-DD HH:mm:ss')}</div>
+          <div className={style.time}>{dayjs(item.firstCommentCreatedTime).format('YYYY-MM-DD HH:mm:ss')}</div>
           <div className={style.func_box}>
             <img
               onClick={() => setIsModalOpen(true)}
@@ -100,13 +118,13 @@ export default function FirstComment ({ firstCommentId }: Props) {
               onMouseOut={() => { setComment(false) }}
             ></img>
             {
-              (msg ? msg.liked : null) ? <div className={style.likeIcon}>
+              isLike ? <div className={style.likeIcon}>
                 <img
                   src={likeHover}
                   className={style.icon}
                   onClick={() => pushLike()}
                 ></img>
-                <span className={style.num_click}>{msg?.firstCommentLikeCount}</span>
+                <span className={style.num_click}>{likeNum}</span>
               </div>
                 : <div className={style.likeIcon}
                   onMouseOver={() => { setLike(true) }}
@@ -117,24 +135,24 @@ export default function FirstComment ({ firstCommentId }: Props) {
                     className={style.icon}
                     onClick={() => pushLike()}
                   ></img>
-                  <span className={style.num}>{msg?.firstCommentLikeCount}</span>
+                  <span className={style.num}>{likeNum}</span>
                 </div>
             }
           </div>
         </div>
         {
-          msg?.firstCommentCount !== 0
-            ? <div className={style.downBox}><div>共{msg?.firstCommentCount}条回复 </div>
+          item.firstCommentCount !== 0
+            ? <div className={style.downBox}><div>共{item.firstCommentCount}条回复 </div>
               <img src={downIcon} className={style.downIcon} onClick={() => { unfoldMsg() }}></img></div>
             : null
         }
         {fold ? null
           : msg2.map(item => <div key={item.sonCommentId}>
-            <SecondComment id={item.sonCommentId}></SecondComment>
+            <SecondComment post={item} getSon={getSon}></SecondComment>
           </div>)
         }
         <Modal
-          title={`回复@${msg?.name}`}
+          title={`回复@${item.name}`}
           okText='发布'
           cancelText='取消'
           open={isModalOpen}

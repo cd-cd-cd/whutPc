@@ -8,7 +8,7 @@ import heartIcon from '../../../assets/heart_gray.png'
 import heartHover from '../../../assets/heart_orange.png'
 import commentIcon from '../../../assets/comment_gray.png'
 import commentHover from '../../../assets/comment_orange.png'
-import { IFirstComment, IRecord } from '../../../libs/model'
+import { ICommentRule, IFirstComment, IRecord } from '../../../libs/model'
 import { accordLikeNum, accordTime, sendFirstComment, toggleLike } from '../../../api/article'
 import { useNavigate } from 'react-router-dom'
 // import { getUser } from '../../../api/user'
@@ -19,8 +19,6 @@ import { getUser } from '../../../api/user'
 interface Props {
   post: IRecord
 }
-
-type ICommentRule = 'TIME' | 'LIKENUM'
 
 export default function MessageItem ({ post }: Props) {
   // 设置悬浮
@@ -34,10 +32,7 @@ export default function MessageItem ({ post }: Props) {
   const [isLike, setIsLike] = useState<boolean>(post.liked)
   // 记录点赞数
   const [likeNum, setLikeNum] = useState<number>(post.articleLikeCount)
-  // const { ruleType, categoryId } = useContext(context)
   const navigator = useNavigate()
-  // const { queryAttention, toggleConcerned } = useItems()
-  // const [attention, setAttention] = useState<boolean>()
   // 记录是否点击评论
   const [isComment, setIsComment] = useState<boolean>(false)
   // 保存评论
@@ -58,22 +53,6 @@ export default function MessageItem ({ post }: Props) {
       setIsLike(!isLike)
     }
   }
-
-  // // 存储关注
-  // const setAttentionFunc = async () => {
-  //   const temp = await queryAttention(post.articleUserId)
-  //   setAttention(temp)
-  // }
-
-  // // 关注&取消关注
-  // const toggleFollow = async () => {
-  //   if (typeof attention !== 'undefined') {
-  //     toggleConcerned(post.articleUserId, !attention)
-  //     if (getArticles) {
-  //       getArticles(ruleType, categoryId)
-  //     }
-  //   }
-  // }
 
   // 新增1级评论
   const sendCommentone = async () => {
@@ -144,12 +123,6 @@ export default function MessageItem ({ post }: Props) {
               ? <Tag color="#eb7340" className={style.tag}>{post.articleCategoryName}</Tag>
               : null
             }
-            {/* {
-              post.articleUserId !== email ? <div
-                onClick={() => { toggleFollow(); getArticles ? getArticles(ruleType, categoryId) : null }}
-                className={attention ? style.concerned : style.unconcerned}
-              >{attention ? '已关注' : '关注'}</div> : null
-            } */}
           </div>
           <div className={style.time}>
             {dayjs(post.createdTime).format('YYYY-MM-DD HH:mm:ss')}
@@ -242,7 +215,10 @@ export default function MessageItem ({ post }: Props) {
               {
                 FirstCommentLists?.map((item) => <FirstComment
                   key={item.firstCommentId}
-                  firstCommentId={item.firstCommentId}
+                  item={item}
+                  commentRule={commentRule}
+                  getFirstCommentBaseLikeNum={getFirstCommentBaseLikeNum}
+                  getFirstCommentBaseTime={getFirstCommentBaseTime}
                 ></FirstComment>)
               }
             </div>
