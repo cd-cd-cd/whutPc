@@ -70,7 +70,7 @@ export default function InitInfo () {
           message.success('密码修改成功, 正跳转至首页重新登录')
           navigator('/login')
         } else {
-          message.error('密码修改失败请重试')
+          // message.error('密码修改失败请重试')
         }
       } else {
         message.info('两次密码不一致，请检查')
@@ -127,8 +127,6 @@ export default function InitInfo () {
         getInfo()
         setAvatarVisible(false)
         message.success('更新成功')
-      } else {
-        message.error('修改失败，请稍后再试')
       }
     }
   }
@@ -143,8 +141,6 @@ export default function InitInfo () {
         message.success('修改成功！')
         getInfo()
         setNick(false)
-      } else {
-        message.info('修改失败，请稍后再试')
       }
     }
     setInitAvatar('')
@@ -156,8 +152,6 @@ export default function InitInfo () {
     if (res?.code === 200) {
       getInfo()
       message.success('修改成功！')
-    } else {
-      message.info('修改失败，请稍后再试')
     }
   }
 

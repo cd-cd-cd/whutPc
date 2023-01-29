@@ -67,7 +67,6 @@ export default function PerHome () {
       const res = await getSelfPosts(id, current)
       if (res?.data.records) {
         setAllArticel(res.data)
-        console.log(res.data)
       }
     }
   }

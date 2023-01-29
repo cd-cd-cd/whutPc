@@ -17,7 +17,7 @@ export default function FirstComment ({ firstCommentId }: Props) {
   const [like, setLike] = useState(false)
   const [comment, setComment] = useState(false)
   const [msg, setMsg] = useState<IFirstComment>()
-  const [fold, setFold] = useState<boolean>(false)
+  const [fold, setFold] = useState<boolean>(true)
   // 保存发布的评论
   const [sendMsg, setSendMsg] = useState('')
   // 保存二级评论
@@ -61,7 +61,8 @@ export default function FirstComment ({ firstCommentId }: Props) {
   }
 
   const unfoldMsg = async () => {
-    if (!fold) {
+    console.log(fold)
+    if (fold) {
       if (msg?.firstCommentId) {
         const res = await getSonMsg(msg?.firstCommentId, 1)
         console.log(res?.data.records)
@@ -124,7 +125,7 @@ export default function FirstComment ({ firstCommentId }: Props) {
         {
           msg?.firstCommentCount !== 0
             ? <div className={style.downBox}><div>共{msg?.firstCommentCount}条回复 </div>
-              <img src={downIcon} className={style.downIcon} onClick={() => unfoldMsg()}></img></div>
+              <img src={downIcon} className={style.downIcon} onClick={() => { unfoldMsg() }}></img></div>
             : null
         }
         {fold ? null
