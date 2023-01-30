@@ -10,17 +10,15 @@ import commentIcon from '../../../assets/comment_gray.png'
 import commentHover from '../../../assets/comment_orange.png'
 import { ICommentRule, IFirstComment, IRecord } from '../../../libs/model'
 import { accordLikeNum, accordTime, sendFirstComment, toggleLike } from '../../../api/article'
-import { useNavigate } from 'react-router-dom'
-// import { getUser } from '../../../api/user'
 import FirstComment from './FirstComment'
 import { getUser } from '../../../api/user'
-// import defaultImg  from '../.././../assets/'
 
 interface Props {
   post: IRecord
+  showDetailMask?: (post: IRecord) => void
 }
 
-export default function MessageItem ({ post }: Props) {
+export default function MessageItem ({ post, showDetailMask }: Props) {
   // 设置悬浮
   const [eye, setEye] = useState(false)
   const [heart, setHeart] = useState(false)
@@ -32,7 +30,6 @@ export default function MessageItem ({ post }: Props) {
   const [isLike, setIsLike] = useState<boolean>(post.liked)
   // 记录点赞数
   const [likeNum, setLikeNum] = useState<number>(post.articleLikeCount)
-  const navigator = useNavigate()
   // 记录是否点击评论
   const [isComment, setIsComment] = useState<boolean>(false)
   // 保存评论
@@ -107,6 +104,13 @@ export default function MessageItem ({ post }: Props) {
     }
   }
 
+  // 控制细节遮罩层
+  const showMask = () => {
+    if (showDetailMask) {
+      showDetailMask(post)
+    }
+  }
+
   useEffect(() => {
     getPerAVatar()
   }, [])
@@ -129,7 +133,7 @@ export default function MessageItem ({ post }: Props) {
           </div>
         </div>
       </div>
-      <div className={style.detailText} onClick={() => navigator(`/retail?id=${post.articleId}`)}>
+      <div className={style.detailText} onClick={() => showMask()}>
         <div className={style.title}>{post.articleTitle}</div>
         <div className={style.content}>{post.articleContent}</div>
       </div>

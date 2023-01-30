@@ -46,8 +46,7 @@ export default function SecondComment ({ post, getSon }: Props) {
   const email = localStorage.getItem('email')!
 
   const transNav = (id: string, toId?: string) => {
-    console.log(id !== post.sonCommentUserId, id, post.sonCommentUserId)
-    if (id !== post.sonCommentUserId) {
+    if (id !== toId) {
       window.open(`/page/${toId}`)
     } else {
       window.open('/homePage')

@@ -7,7 +7,7 @@ import InitInfo from './pages/InitInfo'
 import Home from './pages/Home'
 import { IRecord, ICategory, rule } from './libs/model'
 import { StoreProvider } from './hooks/store'
-import RetailArticle from './pages/RetailArticle'
+// import RetailArticle from './pages/RetailArticle'
 import PerHome from './pages/Perhome'
 
 function App () {
@@ -32,7 +32,7 @@ function App () {
           <Route path='/register' element={<Register />}></Route>
           <Route path='/homePage' element={<InitInfo />}></Route>
           <Route path='/home' element={<Home />}></Route>
-          <Route path='/Retail' element={<RetailArticle/>}></Route>
+          {/* <Route path='/Retail' element={<RetailArticle/>}></Route> */}
           <Route path='/page/:id' element={<PerHome/>}></Route>
           {/* <Route path='*' element={<Navigate to='/register'/>}></Route> */}
           <Route path='*' element={<Navigate to='/home' />}></Route>
