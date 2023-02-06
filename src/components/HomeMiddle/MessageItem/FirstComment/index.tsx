@@ -19,6 +19,8 @@ interface Props {
 export default function FirstComment ({ item, commentRule, getFirstCommentBaseLikeNum, getFirstCommentBaseTime }: Props) {
   const [like, setLike] = useState(false)
   const [comment, setComment] = useState(false)
+  const [current, setCurrent] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(1)
   // 记录点赞
   const [isLike, setIsLike] = useState<boolean>(item.liked)
   // 记录点赞数
@@ -73,6 +75,8 @@ export default function FirstComment ({ item, commentRule, getFirstCommentBaseLi
   const unfoldMsg = () => {
     if (fold) {
       getSon()
+    } else {
+      setCurrent(1)
     }
     setFold(!fold)
   }
@@ -81,8 +85,8 @@ export default function FirstComment ({ item, commentRule, getFirstCommentBaseLi
     if (item.firstCommentId) {
       const res = await getSonMsg(item.firstCommentId, 1)
       if (res?.data) {
-        console.log(res.data.records)
         setMsg2(res.data.records)
+        setPageSize(res.data.pages)
       }
     }
   }
@@ -93,6 +97,17 @@ export default function FirstComment ({ item, commentRule, getFirstCommentBaseLi
       window.open(`/page/${item.firstCommentUserId}`)
     } else {
       window.open('/homePage')
+    }
+  }
+
+  const addFirst = async () => {
+    if (pageSize > current) {
+      setCurrent(current + 1)
+      const res = await getSonMsg(item.firstCommentId, current + 1)
+      if (res?.data.records) {
+        setMsg2([...msg2, ...res.data.records])
+        setPageSize(res.data.pages)
+      }
     }
   }
   return (
@@ -149,7 +164,14 @@ export default function FirstComment ({ item, commentRule, getFirstCommentBaseLi
         {fold ? null
           : msg2.map(item => <div key={item.sonCommentId}>
             <SecondComment post={item} getSon={getSon}></SecondComment>
-          </div>)
+          </div>
+          )
+        }
+        {
+          !fold && pageSize >= 2 && pageSize !== current
+            ? <div className={style.dian} onClick={() => addFirst()}>
+              ...
+            </div> : ''
         }
         <Modal
           title={`回复@${item.name}`}

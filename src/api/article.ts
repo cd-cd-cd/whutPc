@@ -1,23 +1,25 @@
 import request from "../utils/request";
 import { INewRes, ICategory, IRecord, resSelfPosts, IResFirstCommentList, IFirstComment, ISonRes, ISecondComment } from '../libs/model'
 // 首页最新文章
-export const LatestArticles = async (category?: number) => {
+export const LatestArticles = async (current: number, category?: number) => {
   return await request<INewRes>({
     url: '/article/new',
     method: 'GET',
     params: {
-      category
+      category,
+      current
     }
   })
 }
 
 // 得到点赞最多十条
-export const HottestArticles = async (category?: number) => {
+export const HottestArticles = async (current: number, category?: number) => {
   return await request<INewRes>({
     url: '/article/hot',
     method: 'GET',
     params: {
-      category
+      category,
+      current
     }
   })
 }
@@ -63,10 +65,7 @@ export const postArticle = async (articleCategoryId: number, articleContent: Str
 export const getRetailArticle = async (id: string) => {
   return await request<IRecord>({
     url: `/article/detail/${id}`,
-    method: 'GET',
-    data: {
-      id
-    }
+    method: 'GET'
   })
 }
 
@@ -83,7 +82,7 @@ export const getSelfPosts = async (useId: string, current: number) => {
 }
 
 // 新增评论
-export const sendFirstComment = async (firstCommentArticleId: number, firstCommentContent: string) => {
+export const sendFirstComment = async (firstCommentArticleId: string | number, firstCommentContent: string) => {
   return await request({
     url: '/firstComment/create',
     method: 'POST',
@@ -95,23 +94,25 @@ export const sendFirstComment = async (firstCommentArticleId: number, firstComme
 }
 
 // 根据点赞数查询文章评论 (暂时未设置页数)
-export const accordLikeNum = async (articleId: string) => {
+export const accordLikeNum = async (articleId: string, current: number) => {
   return await request<IResFirstCommentList>({
     url: '/firstComment/getHotList',
     method: 'GET',
     params: {
-      articleId
+      articleId,
+      current
     }
   })
 }
 
 // 根据发布时间查询文章评论(暂时未设置页数)
-export const accordTime = async (articleId: string) => {
+export const accordTime = async (articleId: string, current: number) => {
   return await request<IResFirstCommentList>({
     url: '/firstComment/getNewList',
     method: 'GET',
     params: {
-      articleId
+      articleId,
+      current
     }
   })
 }

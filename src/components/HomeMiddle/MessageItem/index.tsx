@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import style from './index.module.scss'
 import dayjs from 'dayjs'
 import { Input, message, Tag } from 'antd'
@@ -11,20 +11,17 @@ import commentHover from '../../../assets/comment_orange.png'
 import { ICommentRule, IFirstComment, IRecord } from '../../../libs/model'
 import { accordLikeNum, accordTime, sendFirstComment, toggleLike } from '../../../api/article'
 import FirstComment from './FirstComment'
-import { getUser } from '../../../api/user'
 
 interface Props {
-  post: IRecord
-  showDetailMask?: (post: IRecord) => void
+  post: IRecord,
+  avatar?: string
 }
 
-export default function MessageItem ({ post, showDetailMask }: Props) {
+export default function MessageItem ({ post, avatar }: Props) {
   // 设置悬浮
   const [eye, setEye] = useState(false)
   const [heart, setHeart] = useState(false)
   const [comment, setComment] = useState(false)
-
-  const [avatar, setAvatar] = useState<string>()
 
   // 记录点赞
   const [isLike, setIsLike] = useState<boolean>(post.liked)
@@ -37,7 +34,9 @@ export default function MessageItem ({ post, showDetailMask }: Props) {
   // 保存评论展示规则
   const [commentRule, setCommentRule] = useState<ICommentRule>('LIKENUM')
   // 储存一级评论
-  const [FirstCommentLists, setFirstCommentLists] = useState<IFirstComment[]>()
+  const [FirstCommentLists, setFirstCommentLists] = useState<IFirstComment[]>([])
+  const [current, setCurrent] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(1)
   // 点赞或取消
   const toggleHeart = async (id: string) => {
     const res = await toggleLike(id)
@@ -70,29 +69,28 @@ export default function MessageItem ({ post, showDetailMask }: Props) {
   }
 
   // 得到一级评论(点赞数)
-  const getFirstCommentBaseLikeNum = async () => {
-    const res = await accordLikeNum(post.articleId)
-    setFirstCommentLists(res?.data.records)
+  const getFirstCommentBaseLikeNum = async (current = 1) => {
+    setCurrent(1)
+    const res = await accordLikeNum(post.articleId, current)
+    if (res?.data.records) {
+      setFirstCommentLists(res?.data.records)
+      setPageSize(res.data.pages)
+    }
   }
 
   // 得到一级评论(时间)
-  const getFirstCommentBaseTime = async () => {
-    const res = await accordTime(post.articleId)
-    setFirstCommentLists(res?.data.records)
+  const getFirstCommentBaseTime = async (current = 1) => {
+    setCurrent(1)
+    const res = await accordTime(post.articleId, current)
+    if (res?.data.records) {
+      setFirstCommentLists(res?.data.records)
+      setPageSize(res.data.pages)
+    }
   }
 
   const viewComment = () => {
     setIsComment(!isComment)
     getFirstCommentBaseLikeNum()
-  }
-
-  // 得到个人信息
-  const getPerAVatar = async () => {
-    const email = localStorage.getItem('email')
-    if (email) {
-      const res = await getUser(email)
-      setAvatar(res?.data.avatar)
-    }
   }
 
   const transNav = () => {
@@ -104,16 +102,24 @@ export default function MessageItem ({ post, showDetailMask }: Props) {
     }
   }
 
-  // 控制细节遮罩层
-  const showMask = () => {
-    if (showDetailMask) {
-      showDetailMask(post)
+  const addFirst = async () => {
+    if (pageSize > current) {
+      setCurrent(current + 1)
+      if (commentRule === 'LIKENUM') {
+        const res = await accordLikeNum(post.articleId, current + 1)
+        if (res?.data.records) {
+          setFirstCommentLists([...FirstCommentLists, ...res?.data.records])
+          setPageSize(res.data.pages)
+        }
+      } else {
+        const res = await accordTime(post.articleId, current + 1)
+        if (res?.data.records) {
+          setFirstCommentLists([...FirstCommentLists, ...res?.data.records])
+          setPageSize(res.data.pages)
+        }
+      }
     }
   }
-
-  useEffect(() => {
-    getPerAVatar()
-  }, [])
   return (
     <div className={style.itemBox}>
       <div className={style.itemHeader}>
@@ -133,7 +139,7 @@ export default function MessageItem ({ post, showDetailMask }: Props) {
           </div>
         </div>
       </div>
-      <div className={style.detailText} onClick={() => showMask()}>
+      <div className={style.detailText} onClick={() => window.open(`/detail/${post.articleId}`)}>
         <div className={style.title}>{post.articleTitle}</div>
         <div className={style.content}>{post.articleContent}</div>
       </div>
@@ -224,6 +230,12 @@ export default function MessageItem ({ post, showDetailMask }: Props) {
                   getFirstCommentBaseLikeNum={getFirstCommentBaseLikeNum}
                   getFirstCommentBaseTime={getFirstCommentBaseTime}
                 ></FirstComment>)
+              }
+              {
+                pageSize >= 2 && pageSize !== current
+                  ? <div className={style.dian} onClick={() => addFirst()}>
+                  . . .
+                </div> : ''
               }
             </div>
           </div> : null

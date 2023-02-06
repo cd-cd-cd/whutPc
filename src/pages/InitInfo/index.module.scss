@@ -229,8 +229,6 @@
 .foot{
   margin-top: 20px;
   width: 910px;
-  display: flex;
-  flex-direction: row;
 }
 
 .navPage{
@@ -274,4 +272,13 @@
 .article_box{
   width: 910px;
   padding: 10px 60px 10px 40px;
+}
+
+
+.pag{
+  margin: 0 auto;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

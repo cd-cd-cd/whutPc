@@ -1,9 +1,7 @@
-import { Input } from 'antd';
+import { Pagination } from 'antd';
 import React, { useEffect, useState } from 'react'
 import MessageItem from '../../components/HomeMiddle/MessageItem'
 import style from './index.module.scss'
-import topIcon from '../../assets/top.png'
-import bottomIcon from '../../assets/bottom.png'
 import { useParams } from 'react-router-dom'
 import { getUser } from '../../api/user'
 import { IResUserInfo, resSelfPosts } from '../../libs/model'
@@ -11,18 +9,13 @@ import { getSelfPosts } from '../../api/article'
 import useItems from '../../hooks/useItems'
 export default function PerHome () {
   const [current, setCurrent] = useState(1)
+  const [total, setTotal] = useState<number>()
   const [allArticle, setAllArticel] = useState<resSelfPosts>()
   const { queryAttention, toggleConcerned } = useItems()
   const [attention, setAttention] = useState<boolean>()
   const [user, setUser] = useState<IResUserInfo>()
   const params = useParams()
   const id = params.id
-  const dePage = () => {
-    if (current > 1) {
-      const val = current - 1
-      setCurrent(val)
-    }
-  }
 
   // 获取个人信息 同时刷新
   const getInfo = async () => {
@@ -35,38 +28,12 @@ export default function PerHome () {
     }
   }
 
-  const changeCurrent = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    const pages = allArticle?.pages
-    if (!isNaN(Number(value))) {
-      const newVal = Number(value)
-      if (pages) {
-        if (newVal <= pages && newVal >= 1) {
-          setCurrent(newVal)
-        } else if (newVal <= 0) {
-          setCurrent(1)
-        } else if (newVal > pages) {
-          setCurrent(pages)
-        }
-      }
-    }
-  }
-
-  const addPage = () => {
-    const pages = allArticle?.pages
-    if (pages) {
-      if (current < pages) {
-        const val = current + 1
-        setCurrent(val)
-      }
-    }
-  }
-
   const getPosts = async () => {
     if (id) {
       const res = await getSelfPosts(id, current)
       if (res?.data.records) {
         setAllArticel(res.data)
+        setTotal(res.data.total)
       }
     }
   }
@@ -129,14 +96,8 @@ export default function PerHome () {
               )
             }
           </div>
-          <div className={style.navPage}>
-            <div className={style.changeBox} onClick={() => dePage()}>
-              <img className={style.changeIcon} src={topIcon}></img>
-            </div>
-            <Input className={style.input} value={current} onChange={(e) => changeCurrent(e)}></Input>
-            <div className={style.changeBox} onClick={() => addPage()}>
-              <img className={style.changeIcon} src={bottomIcon}></img>
-            </div>
+          <div className={style.pag}>
+            <Pagination current={current} onChange={(page) => setCurrent(page)} total={total}></Pagination>
           </div>
         </div>
       </div>

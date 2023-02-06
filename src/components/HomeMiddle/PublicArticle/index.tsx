@@ -6,12 +6,12 @@ import style from './index.module.scss'
 import { context } from '../../../hooks/store'
 import { postArticle } from '../../../api/article'
 import { IArticle } from '../../../libs/model'
-import usePostArray from '../../../hooks/usePostArray'
-// import { category } from '../../../api/article'
 
-export default function PublicArticle () {
-  const { categoryArrays, ruleType } = useContext(context)
-  const { lastArticle } = usePostArray()
+interface Props {
+  refresh: () => void
+}
+export default function PublicArticle ({ refresh }: Props) {
+  const { categoryArrays } = useContext(context)
   const [article, setArticle] = useState<IArticle>({ articleCategoryId: -1, articleContent: '', articleTitle: '' })
   const [putVisible, setPutVisible] = useState(false)
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -19,7 +19,6 @@ export default function PublicArticle () {
   const [previewTitle, setPreviewTitle] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([
   ])
-  // const [blobAvatar, setBlobAvatar] = useState<Blob>()
 
   const getBase64 = (file: RcFile): Promise<string> =>
     new Promise((resolve, reject) => {
@@ -83,9 +82,7 @@ export default function PublicArticle () {
     } else {
       const res = await postArticle(articleCategoryId, articleContent, articleTitle)
       if (res?.code === 200) {
-        if (ruleType === 'lasted') {
-          lastArticle()
-        }
+        refresh()
         message.success('发布成功')
         setPutVisible(false)
       } else {

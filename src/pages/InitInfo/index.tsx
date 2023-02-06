@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import style from './index.module.scss'
 import './index.css'
-import { Button, Input, Upload, message, Modal, Radio, RadioChangeEvent, Form } from 'antd'
+import { Button, Input, Upload, message, Modal, Radio, RadioChangeEvent, Form, Pagination } from 'antd'
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { changePassword, editInfo, getUser, postAvatar } from '../../api/user'
@@ -9,8 +9,6 @@ import { IResUserInfo, resSelfPosts } from '../../libs/model'
 import { useNavigate } from 'react-router-dom'
 import useVerify from '../../hooks/useVerify'
 import { useForm } from 'antd/lib/form/Form'
-import topIcon from '../../assets/top.png'
-import bottomIcon from '../../assets/bottom.png'
 import { getSelfPosts } from '../../api/article'
 import MessageItem from '../../components/HomeMiddle/MessageItem'
 
@@ -29,6 +27,7 @@ export default function InitInfo () {
   const [user, setUser] = useState<IResUserInfo>()
   const [allArticle, setAllArticel] = useState<resSelfPosts>()
   const [current, setCurrent] = useState(1)
+  const [total, setTotal] = useState<number>()
 
   const uploadButton = (
     <div>
@@ -175,41 +174,7 @@ export default function InitInfo () {
       const res = await getSelfPosts(email, current)
       if (res?.data.records) {
         setAllArticel(res.data)
-        console.log(res.data)
-      }
-    }
-  }
-
-  const changeCurrent = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    const pages = allArticle?.pages
-    if (!isNaN(Number(value))) {
-      const newVal = Number(value)
-      if (pages) {
-        if (newVal <= pages && newVal >= 1) {
-          setCurrent(newVal)
-        } else if (newVal <= 0) {
-          setCurrent(1)
-        } else if (newVal > pages) {
-          setCurrent(pages)
-        }
-      }
-    }
-  }
-
-  const dePage = () => {
-    if (current > 1) {
-      const val = current - 1
-      setCurrent(val)
-    }
-  }
-
-  const addPage = () => {
-    const pages = allArticle?.pages
-    if (pages) {
-      if (current < pages) {
-        const val = current + 1
-        setCurrent(val)
+        setTotal(res.data.total)
       }
     }
   }
@@ -277,14 +242,8 @@ export default function InitInfo () {
           </div>
         </div>
         <div className={style.foot}>
-          <div className={style.navPage}>
-            <div className={style.changeBox} onClick={() => dePage()}>
-              <img className={style.changeIcon} src={topIcon}></img>
-            </div>
-            <Input className={style.input} value={current} onChange={(e) => changeCurrent(e)}></Input>
-            <div className={style.changeBox} onClick={() => addPage()}>
-              <img className={style.changeIcon} src={bottomIcon}></img>
-            </div>
+          <div className={style.pag}>
+            <Pagination current={current} onChange={(page) => setCurrent(page)} total={total}></Pagination>
           </div>
           <div className={style.article_box}>
             {

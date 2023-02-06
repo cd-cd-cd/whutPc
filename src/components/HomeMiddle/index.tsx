@@ -5,53 +5,61 @@ import './index.css'
 import MessageItem from './MessageItem'
 import SortRule from './SortRule'
 import PublicArticle from './PublicArticle'
-import { IRecord, rule } from '../../libs/model'
+// import { rule } from '../../libs/model'
 import usePostArray from '../../hooks/usePostArray'
 import qqIcon from '../../assets/qq.png'
-import Mask from './Mask'
+import { Pagination } from 'antd'
+import { getUser } from '../../api/user'
 
 export default function HomeMiddle () {
   const { categoryId, ruleType, PostList } = useContext(context)
-  const { lastArticle, hotArticle } = usePostArray()
-  const [post, setPost] = useState<IRecord>()
-
-  const getArticles = async (type: rule, categoryId: number) => {
-    console.log(categoryId, ruleType)
-    if (type === 'lasted') {
-      lastArticle()
-    } else if (type === 'hottest') {
-      hotArticle()
+  const { getArticles, total, lastArticle } = usePostArray()
+  const [current, setCurrent] = useState<number>(1)
+  const [avatar, setAvatar] = useState<string>()
+  // 得到个人信息
+  const getPerAVatar = async () => {
+    const email = localStorage.getItem('email')
+    if (email) {
+      const res = await getUser(email)
+      setAvatar(res?.data.avatar)
     }
   }
 
-  const showDetailMask = (post: IRecord) => {
-    setPost(post)
-  }
-
-  const closeMask = () => {
-    setPost(undefined)
-  }
+  useEffect(() => {
+    getPerAVatar()
+  }, [])
 
   useEffect(() => {
-    getArticles(ruleType, categoryId)
+    setCurrent(1)
+    getArticles(ruleType, 1)
   }, [ruleType, categoryId])
+
+  useEffect(() => {
+    getArticles(ruleType, current)
+  }, [current])
+
+  const refresh = () => {
+    if (current === 1 && ruleType === 'lasted') {
+      lastArticle(current)
+    }
+  }
   return (
-    <div className={style.mid}>
-      <div className={style.box}>
-        <PublicArticle></PublicArticle>
-        <SortRule></SortRule>
-        {
-          PostList.map((post) =>
-            <div key={post.articleId}>
-              <MessageItem post={post} showDetailMask={showDetailMask}></MessageItem>
-            </div>
-          )
-        }
+    <>
+      <div className={style.mid}>
+        <div className={style.box}>
+          <PublicArticle refresh={refresh}></PublicArticle>
+          <SortRule></SortRule>
+          {
+            PostList.map((post) =>
+              <div key={post.articleId}>
+                <MessageItem avatar={avatar} post={post}></MessageItem>
+              </div>
+            )
+          }
+        </div>
+        <img src={qqIcon} className={style.qqIcon}></img>
       </div>
-      <img src={qqIcon} className={style.qqIcon}></img>
-      {
-        post ? <Mask post={post} closeMask={closeMask}></Mask> : null
-      }
-    </div>
+      <Pagination onChange={(page) => setCurrent(page)} className={style.pagination} current={current} total={total} />
+    </>
   )
 }
