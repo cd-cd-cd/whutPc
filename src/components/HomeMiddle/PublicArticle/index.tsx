@@ -1,10 +1,10 @@
-import { Button, Input, message, Modal, Select, Upload, UploadFile } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
-import type { RcFile, UploadProps } from 'antd/es/upload'
+import { Button, Input, message, Select } from 'antd'
 import React, { useContext, useState } from 'react'
 import style from './index.module.scss'
+import fileIcon from '../../../assets/file.png'
+import trashIcon from '../../../assets/trash.png'
 import { context } from '../../../hooks/store'
-import { postArticle } from '../../../api/article'
+import { postArticle, postPic } from '../../../api/article'
 import { IArticle } from '../../../libs/model'
 
 interface Props {
@@ -12,61 +12,13 @@ interface Props {
 }
 export default function PublicArticle ({ refresh }: Props) {
   const { categoryArrays } = useContext(context)
+  const [imgUrls, setImageUrls] = useState<string[]>([])
+  const [list, setList] = useState<Blob[]>([])
   const [article, setArticle] = useState<IArticle>({ articleCategoryId: -1, articleContent: '', articleTitle: '' })
   const [putVisible, setPutVisible] = useState(false)
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>([
-  ])
-
-  const getBase64 = (file: RcFile): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result as string)
-      reader.onerror = error => reject(error)
-    })
-
-  const handleCancel = () => setPreviewOpen(false)
-
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as RcFile)
-    }
-    setPreviewImage(file.url || (file.preview as string))
-    setPreviewOpen(true)
-    setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1))
-  }
-
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList)
-    console.log(newFileList)
-  }
-
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  )
-
   const onChange = (value: string) => {
     setArticle({ ...article, articleCategoryId: Number(value) })
   }
-
-  // 检查图片格式和大小
-  // const beforeUpload = (file: RcFile) => {
-  //   const isPNG = file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/webp' || file.type === 'image/jpg'
-  //   if (!isPNG) {
-  //     message.error(`${file.name} 不是一个png、jpeg、jpg或jpeg格式的文件`)
-  //   }
-  //   const isLt10M = file.size / 1024 / 1024 < 10
-  //   if (!isLt10M) {
-  //     message.error('图片要小于10MB!')
-  //   }
-  //   return isPNG && isLt10M
-  // }
 
   const createPost = async () => {
     // 假设没有照片
@@ -83,12 +35,58 @@ export default function PublicArticle ({ refresh }: Props) {
       const res = await postArticle(articleCategoryId, articleContent, articleTitle)
       if (res?.code === 200) {
         refresh()
-        message.success('发布成功')
-        setPutVisible(false)
+        const id = res.data
+        if (list.length > 0) {
+          const files: FormData[] = []
+          for (const item of list) {
+            const formData = new FormData()
+            formData.append('file', item)
+            files.push(formData)
+          }
+          const res2 = await postPic(id, files)
+          if (res2?.success) {
+            message.success('发布成功')
+            setPutVisible(false)
+          }
+        } else {
+          message.success('发布成功')
+          setPutVisible(false)
+        }
       } else {
         message.error(res?.errorMsg as string)
       }
     }
+  }
+
+  const beforeUpload = (type: string, size: number) => {
+    const isPNG = type === 'image/png' || type === 'image/jpeg' || type === 'image/jpg' || type === 'image/webp'
+    if (!isPNG) {
+      message.error('请上传图片格式')
+    }
+    const isLt1M = size / 1024 / 1024 < 1
+    if (!isLt1M) {
+      message.error('图片要小于1MB!')
+    }
+    return isPNG && isLt1M
+  }
+
+  const uploadFiles = (e: any) => {
+    const file = e.target.files[0]
+    const size = file.size
+    const type = file.type
+    if (beforeUpload(type, size)) {
+      setList([file, ...list])
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onloadend = function (e) {
+        setImageUrls([e.target!.result as string, ...imgUrls])
+      }
+    }
+  }
+
+  const deleteImg = (deleteIndex: number) => {
+    setImageUrls(imgUrls.filter((_, index) => index !== deleteIndex))
+    setList(list.filter((_, index) => index !== deleteIndex))
   }
 
   return (
@@ -113,19 +111,27 @@ export default function PublicArticle ({ refresh }: Props) {
             <div className={style.content}>
               <Input.TextArea placeholder='详细描述你想发布的内容' onChange={(e) => setArticle({ ...article, articleContent: e.target.value })}></Input.TextArea>
             </div>
-            <div className={style.putImgs}>
-              <Upload
-                listType="picture-card"
-                fileList={fileList}
-                onPreview={handlePreview}
-                onChange={handleChange}
-                action='/article/uploadImg'
-              >
-                {fileList.length >= 9 ? null : uploadButton}
-              </Upload>
-              <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-                <img alt="example" style={{ width: '100%' }} src={previewImage} />
-              </Modal>
+            <div className={style.img_box}>
+              {
+                imgUrls.length
+                  ? imgUrls.map((item, index) =>
+                    <div key={index} className={style.pic_box}>
+                      <img className={style.pic} src={item}></img>
+                      <div className={style.mask}>
+                        <img src={trashIcon} className={style.trashIcon} onClick={() => deleteImg(index)}></img>
+                      </div>
+                    </div>
+                  )
+                  : ''
+              }
+              {
+                imgUrls.length !== 9 ? <div className={style.input_box_file}>
+                  <div className={style.file_box}>
+                    <img src={fileIcon} className={style.fileIcon}></img>
+                  </div>
+                  <input type="file" name="" onChange={(e) => uploadFiles(e)} className={style.fileBtn} id="input" accept="image/*"></input>
+                </div> : ''
+              }
             </div>
             <div className={style.buttoms}>
               <Button onClick={() => { setPutVisible(false) }} className={style.btn}>返回</Button>

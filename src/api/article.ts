@@ -50,13 +50,25 @@ export const toggleLike = async (id: string) => {
 
 // 发布文章
 export const postArticle = async (articleCategoryId: number, articleContent: String, articleTitle: String) => {
-  return await request({
+  return await request<string>({
     url: '/article/create',
     method: 'POST',
     data: {
       articleCategoryId,
       articleContent,
       articleTitle
+    }
+  })
+}
+
+// 上传图片
+export const postPic = async (articleId: string, files: FormData[]) => {
+  return await request({
+    url: '/article/uploadImg',
+    method: 'POST',
+    data: {
+      articleId,
+      files
     }
   })
 }

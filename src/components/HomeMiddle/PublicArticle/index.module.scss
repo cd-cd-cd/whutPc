@@ -31,10 +31,6 @@
   margin-top: 15px;
 }
 
-.putImgs{
-  padding: 20px 60px 20px 110px;
-}
-
 .buttoms{
   display: flex;
   flex-direction: row;
@@ -71,4 +67,69 @@
     padding-left: 6px;
     width: 56px;
   }
+}
+
+.img_box{
+  margin: 20px auto;
+  display: grid;
+  width: 450px;
+  grid-template-columns: 1fr 1fr 1fr;
+  row-gap: 10px;
+}
+
+.pic_box{
+  height: 100px;
+  position: relative;
+
+  &:hover .mask {
+    position: absolute;
+    top: 0px;
+    left: 100px;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+
+    .trashIcon {
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+.trashIcon {
+  width: 0;
+  height: 0;
+}
+.pic{
+  height: 100px;
+  cursor: pointer;
+}
+
+.input_box_file{
+  position: relative;
+}
+.file_box{
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed lightgray;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.fileIcon{
+  width: 55px;
+  height: 55px;
+  cursor: pointer;
+}
+.fileBtn{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  opacity: 0;
 }

@@ -93,7 +93,7 @@ export default function InitInfo () {
     if (!isLt1M) {
       message.error('图片要小于1MB!')
     }
-    return isPNG
+    return isPNG && isLt1M
   }
 
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {

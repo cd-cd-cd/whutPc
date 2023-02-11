@@ -34,6 +34,7 @@ module.exports = {
       "no-labels": "off",
       "@typescript-eslint/no-unused-expressions": "off",
       "@typescript-eslint/no-base-to-string": "off",
-      "@typescript-eslint/restrict-template-expressions": "off"
+      "@typescript-eslint/restrict-template-expressions": "off",
+      "quote-props": "off"
     }
 }
