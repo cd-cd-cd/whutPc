@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import style from './index.module.scss'
 import dayjs from 'dayjs'
-import { Input, message, Tag } from 'antd'
+import { Input, message, Tag, Image } from 'antd'
 import eyeIcon from '../../../assets/eye_gray.png'
 import eyeHover from '../../../assets/eye_orange.png'
 import heartIcon from '../../../assets/heart_gray.png'
@@ -149,7 +149,12 @@ export default function MessageItem ({ post, avatar }: Props) {
             post.articleImg
               ? post.articleImg.split(';')
                 .map((img, index) =>
-                  <img key={index} className={style.img} src={img}></img>
+                  <Image
+                    height={100}
+                    src={img}
+                    key={index}
+                    className={style.img}
+                  />
                 ) : null
           }
         </div>
@@ -234,8 +239,8 @@ export default function MessageItem ({ post, avatar }: Props) {
               {
                 pageSize >= 2 && pageSize !== current
                   ? <div className={style.dian} onClick={() => addFirst()}>
-                  . . .
-                </div> : ''
+                    . . .
+                  </div> : ''
               }
             </div>
           </div> : null

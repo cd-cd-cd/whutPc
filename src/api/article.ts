@@ -62,14 +62,12 @@ export const postArticle = async (articleCategoryId: number, articleContent: Str
 }
 
 // 上传图片
-export const postPic = async (articleId: string, files: FormData[]) => {
+export const postPic = async (files: FormData, id: string) => {
   return await request({
-    url: '/article/uploadImg',
+    url: `/article/uploadImg/?articleId=${id}`,
     method: 'POST',
-    data: {
-      articleId,
-      files
-    }
+    headers: { 'Content-Type': 'multipart/form-data' },
+    data: files
   })
 }
 

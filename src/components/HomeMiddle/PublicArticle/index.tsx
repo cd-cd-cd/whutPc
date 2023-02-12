@@ -1,4 +1,4 @@
-import { Button, Input, message, Select } from 'antd'
+import { Button, Image, Input, message, Select } from 'antd'
 import React, { useContext, useState } from 'react'
 import style from './index.module.scss'
 import fileIcon from '../../../assets/file.png'
@@ -13,7 +13,7 @@ interface Props {
 export default function PublicArticle ({ refresh }: Props) {
   const { categoryArrays } = useContext(context)
   const [imgUrls, setImageUrls] = useState<string[]>([])
-  const [list, setList] = useState<Blob[]>([])
+  const [list, setList] = useState<File[]>([])
   const [article, setArticle] = useState<IArticle>({ articleCategoryId: -1, articleContent: '', articleTitle: '' })
   const [putVisible, setPutVisible] = useState(false)
   const onChange = (value: string) => {
@@ -37,20 +37,18 @@ export default function PublicArticle ({ refresh }: Props) {
         refresh()
         const id = res.data
         if (list.length > 0) {
-          const files: FormData[] = []
+          const formData = new FormData()
           for (const item of list) {
-            const formData = new FormData()
-            formData.append('file', item)
-            files.push(formData)
+            formData.append('files', item)
           }
-          const res2 = await postPic(id, files)
+          const res2 = await postPic(formData, id)
           if (res2?.success) {
             message.success('发布成功')
-            setPutVisible(false)
+            closePost()
           }
         } else {
           message.success('发布成功')
-          setPutVisible(false)
+          closePost()
         }
       } else {
         message.error(res?.errorMsg as string)
@@ -89,6 +87,12 @@ export default function PublicArticle ({ refresh }: Props) {
     setList(list.filter((_, index) => index !== deleteIndex))
   }
 
+  const closePost = () => {
+    setPutVisible(false)
+    setImageUrls([])
+    setList([])
+  }
+
   return (
     <div className={style.back}>
       {
@@ -116,7 +120,7 @@ export default function PublicArticle ({ refresh }: Props) {
                 imgUrls.length
                   ? imgUrls.map((item, index) =>
                     <div key={index} className={style.pic_box}>
-                      <img className={style.pic} src={item}></img>
+                      <Image height={100} className={style.pic} src={item}></Image>
                       <div className={style.mask}>
                         <img src={trashIcon} className={style.trashIcon} onClick={() => deleteImg(index)}></img>
                       </div>
@@ -134,7 +138,7 @@ export default function PublicArticle ({ refresh }: Props) {
               }
             </div>
             <div className={style.buttoms}>
-              <Button onClick={() => { setPutVisible(false) }} className={style.btn}>返回</Button>
+              <Button onClick={() => closePost()} className={style.btn}>返回</Button>
               <Button className={style.btn} onClick={() => createPost()}>确认发布</Button>
             </div>
           </div>
