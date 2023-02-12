@@ -149,12 +149,12 @@ export default function MessageItem ({ post, avatar }: Props) {
             post.articleImg
               ? post.articleImg.split(';')
                 .map((img, index) =>
+                <div key={index} className={style.imgs_box}>
                   <Image
-                    height={100}
                     src={img}
-                    key={index}
                     className={style.img}
                   />
+                </div>
                 ) : null
           }
         </div>

@@ -120,7 +120,7 @@ export default function PublicArticle ({ refresh }: Props) {
                 imgUrls.length
                   ? imgUrls.map((item, index) =>
                     <div key={index} className={style.pic_box}>
-                      <Image height={100} className={style.pic} src={item}></Image>
+                        <Image className={style.pic} src={item}></Image>
                       <div className={style.mask}>
                         <img src={trashIcon} className={style.trashIcon} onClick={() => deleteImg(index)}></img>
                       </div>

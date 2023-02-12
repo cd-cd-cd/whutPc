@@ -79,6 +79,8 @@
 
 .pic_box{
   height: 100px;
+  width: 100px;
+  overflow: hidden;
   position: relative;
 
   &:hover .mask {
@@ -101,6 +103,8 @@
   width: 0;
   height: 0;
 }
+
+
 .pic{
   height: 100px;
   cursor: pointer;
