@@ -58,6 +58,7 @@ function handleErrorCode (status: number, stat: string, msg: string) {
     }
     case 401: {
       message.error('登录失效，请重新登录')
+      localStorage.clear()
       window.location.replace('/home')
       // location.reload()
       return Promise.reject(stat)

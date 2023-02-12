@@ -12,8 +12,10 @@ export default function HomeHeader () {
 
   const getInfo = async (email: string) => {
     const res = await getUser(email)
-    if (res) {
+    if (res?.success) {
       setUser(res.data)
+    } else {
+      setEmail('')
     }
   }
 
