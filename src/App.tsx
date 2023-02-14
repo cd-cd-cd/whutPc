@@ -35,7 +35,7 @@ function App () {
           <Route path='/home' element={<Home />}></Route>
           <Route path='/detail/:id' element={<Detail/>}></Route>
           <Route path='/page/:id' element={<PerHome/>}></Route>
-          <Route path='*' element={<Navigate to='/register'/>}></Route>
+          <Route path='*' element={<Navigate to='/home'/>}></Route>
         </Routes>
       </BrowserRouter>
     </StoreProvider>

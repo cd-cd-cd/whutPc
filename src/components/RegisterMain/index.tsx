@@ -3,7 +3,7 @@ import { Button, Form, Input, message } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
 import { getCode, register } from '../../api/user'
 import style from './index.module.scss'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 
 export default function RegisterMain () {
   const [email, setEmail] = useState('')

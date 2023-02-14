@@ -218,7 +218,10 @@
 .returnIcon {
   width: 30px;
   cursor: pointer;
-  margin: 30px 0 30px 20px;
+  margin-left: 10px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
 }
 
 .right_box{

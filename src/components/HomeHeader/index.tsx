@@ -1,21 +1,21 @@
 import { message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { exitUser, getUser } from '../../api/user'
+import { exitUser, getUser, isLogin } from '../../api/user'
 import { IResUserInfo } from '../../libs/model'
 import style from './index.module.scss'
 
 export default function HomeHeader () {
   const navigator = useNavigate()
   const [user, setUser] = useState<IResUserInfo>()
-  const [email, setEmail] = useState('')
+  const [login, setLogin] = useState<boolean>()
 
   const getInfo = async (email: string) => {
     const res = await getUser(email)
     if (res?.success) {
       setUser(res.data)
     } else {
-      setEmail('')
+      setLogin(false)
     }
   }
 
@@ -23,22 +23,38 @@ export default function HomeHeader () {
     const res = await exitUser()
     if (res?.code === 200) {
       message.success('退出成功')
+      localStorage.clear()
       navigator('/login')
     }
   }
 
-  useEffect(() => {
-    const email = localStorage.getItem("email")
-    if (email) {
-      setEmail(email)
-      getInfo(email)
+  // 查看是否登录
+  const getIsLogin = async () => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      const res = await isLogin(token)
+      if (res?.success) {
+        setLogin(res.data)
+        if (res.data) {
+          const email = localStorage.getItem("email")
+          if (email) {
+            getInfo(email)
+          }
+        }
+      }
+    } else {
+      setLogin(false)
     }
+  }
+
+  useEffect(() => {
+    getIsLogin()
   }, [])
 
   return (
     <div className={style.header}>
       {
-        email
+        login
           ? <div className={style.header_box}>
             <div className={style.person}>
               <div className={style.avatarBox}>
@@ -46,7 +62,7 @@ export default function HomeHeader () {
               </div>
               <div>{user?.nickName}</div>
             </div>
-            <div className={style.block} onClick={() => navigator('/homePage')}>个人中心</div>
+            <div className={style.block} onClick={() => window.open('/homePage')}>个人中心</div>
             <div className={style.block} onClick={() => exit()}>退出</div>
           </div>
           : <div className={style.imLogin}>

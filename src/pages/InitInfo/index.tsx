@@ -28,7 +28,6 @@ export default function InitInfo () {
   const [allArticle, setAllArticel] = useState<resSelfPosts>()
   const [current, setCurrent] = useState(1)
   const [total, setTotal] = useState<number>()
-
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -190,6 +189,9 @@ export default function InitInfo () {
   return (
     <div className={style.init}>
       <div className={style.main}>
+        {/* <div>
+          <img className={style.returnIcon} src={returnIcon} onClick={() => navigator(-1)}></img>
+        </div> */}
         <div className={style.info}>
           <div className={style.left_box}>
             <div className={style.avatar_box} onClick={() => setAvatarVisible(true)}>

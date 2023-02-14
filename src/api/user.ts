@@ -128,3 +128,14 @@ export const toggleAttention = async (userId: string, isFollow: boolean) => {
     method: 'PUT'
   })
 }
+
+// 查询是否登录
+export const isLogin = async (token: string) => {
+  return await request<boolean>({
+    url: '/user/isLogin',
+    method: 'GET',
+    params: {
+      token
+    }
+  })
+}
