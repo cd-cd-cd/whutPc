@@ -58,7 +58,7 @@ export default function HomeMiddle () {
         </div>
         <img src={qqIcon} className={style.qqIcon}></img>
       </div>
-      <Pagination onChange={(page) => setCurrent(page)} className={style.pagination} current={current} total={total} />
+      <Pagination onChange={(page) => setCurrent(page)} showQuickJumper className={style.pagination} current={current} total={total} />
     </>
   )
 }
