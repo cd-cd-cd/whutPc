@@ -335,7 +335,7 @@ export default function InitInfo () {
                 }
               }}
             >
-              <div>{imageUrl ? <img src={imageUrl} style={{ width: '100%' }} /> : uploadButton}</div>
+              <div>{imageUrl ? <div className={style.showImgBox}><img src={imageUrl} className={style.showImg}/></div> : uploadButton}</div>
             </Upload>
           </div>
           <div className={style.init_box}>

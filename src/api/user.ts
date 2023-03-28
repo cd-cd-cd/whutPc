@@ -62,7 +62,7 @@ export const login = async (email: string, password: string, code?: string) => {
 // 获取用户信息
 export const getUser = async (userId: string) => {
   return await request<IResUserInfo>({
-    url: `/user/quary/${userId}`,
+    url: `/user/query/${userId}`,
     method: 'GET',
     data: {
       userId

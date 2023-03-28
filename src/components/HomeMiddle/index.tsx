@@ -5,7 +5,6 @@ import './index.css'
 import MessageItem from './MessageItem'
 import SortRule from './SortRule'
 import PublicArticle from './PublicArticle'
-// import { rule } from '../../libs/model'
 import usePostArray from '../../hooks/usePostArray'
 import qqIcon from '../../assets/qq.png'
 import { Pagination } from 'antd'
@@ -30,8 +29,8 @@ export default function HomeMiddle () {
   }, [])
 
   useEffect(() => {
-    setCurrent(1)
     getArticles(ruleType, 1)
+    setCurrent(1)
   }, [ruleType, categoryId])
 
   useEffect(() => {
