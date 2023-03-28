@@ -1,4 +1,4 @@
-import { Button, Image, Input, message, Select } from 'antd'
+import { Button, Image, Input, message, Select, Spin } from 'antd'
 import React, { useContext, useState } from 'react'
 import style from './index.module.scss'
 import fileIcon from '../../../assets/file.png'
@@ -11,6 +11,8 @@ interface Props {
   refresh: () => void
 }
 export default function PublicArticle ({ refresh }: Props) {
+  // 遮罩层
+  const [loading, setLoading] = useState(false)
   const { categoryArrays } = useContext(context)
   const [imgUrls, setImageUrls] = useState<string[]>([])
   const [list, setList] = useState<File[]>([])
@@ -39,12 +41,15 @@ export default function PublicArticle ({ refresh }: Props) {
       list.forEach(file => {
         formDate.append('files', file)
       })
+      setLoading(true)
       const res = await postArticle(formDate)
       if (res?.code === 200) {
         message.success('发布成功')
         closePost()
+        setLoading(false)
       } else {
         message.error(res?.errorMsg as string)
+        setLoading(false)
       }
     }
   }
@@ -89,6 +94,13 @@ export default function PublicArticle ({ refresh }: Props) {
   return (
     <div className={style.back}>
       {
+        loading ? <div className={style.maskSpin}>
+          <Spin
+            spinning={loading}
+          ></Spin>
+        </div> : ''
+      }
+      {
         !putVisible ? <div className={style.infoInit} onClick={() => { setPutVisible(true) }}>发布一条信息吧</div>
           : <div>
             <div className={style.info}>信息发布</div>
@@ -113,7 +125,7 @@ export default function PublicArticle ({ refresh }: Props) {
                 imgUrls.length
                   ? imgUrls.map((item, index) =>
                     <div key={index} className={style.pic_box}>
-                        <Image className={style.pic} src={item}></Image>
+                      <Image className={style.pic} src={item}></Image>
                       <div className={style.mask}>
                         <img src={trashIcon} className={style.trashIcon} onClick={() => deleteImg(index)}></img>
                       </div>
