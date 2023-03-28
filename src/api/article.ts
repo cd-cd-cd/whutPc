@@ -58,16 +58,6 @@ export const postArticle = async (FormData: FormData) => {
   })
 }
 
-// // 上传图片
-// export const postPic = async (files: FormData, id: string) => {
-//   return await request({
-//     url: `/article/uploadImg/?articleId=${id}`,
-//     method: 'POST',
-//     headers: { 'Content-Type': 'multipart/form-data' },
-//     data: files
-//   })
-// }
-
 // 查询文章详细内容
 export const getRetailArticle = async (id: string) => {
   return await request<IRecord>({
