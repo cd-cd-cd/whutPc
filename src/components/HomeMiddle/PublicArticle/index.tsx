@@ -32,13 +32,14 @@ export default function PublicArticle ({ refresh }: Props) {
     } else if (articleTitle.length > 20 || articleTitle.length < 4) {
       message.info('发布标题字数在4-20之间')
     } else {
-      let res
-      if (list.length) {
-        console.log(list)
-        res = await postArticle(articleCategoryId, articleContent, articleTitle, list)
-      } else {
-        res = await postArticle(articleCategoryId, articleContent, articleTitle)
-      }
+      const formDate = new FormData()
+      formDate.append('articleCategoryId', articleCategoryId.toString())
+      formDate.append('articleContent', articleContent as string)
+      formDate.append('articleTitle', articleTitle as string)
+      list.forEach(file => {
+        formDate.append('files', file)
+      })
+      const res = await postArticle(formDate)
       if (res?.code === 200) {
         message.success('发布成功')
         closePost()

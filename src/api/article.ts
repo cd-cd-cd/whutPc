@@ -49,16 +49,12 @@ export const toggleLike = async (id: string) => {
 }
 
 // 发布文章
-export const postArticle = async (articleCategoryId: number, articleContent: String, articleTitle: String, files?: File[]) => {
+export const postArticle = async (FormData: FormData) => {
   return await request<string>({
     url: '/article/create',
     method: 'POST',
-    data: {
-      articleCategoryId,
-      articleContent,
-      articleTitle,
-      files
-    }
+    headers: { 'Content-Type': 'multipart/form-data' },
+    data: FormData
   })
 }
 
