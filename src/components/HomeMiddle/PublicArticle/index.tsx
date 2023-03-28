@@ -4,7 +4,7 @@ import style from './index.module.scss'
 import fileIcon from '../../../assets/file.png'
 import trashIcon from '../../../assets/trash.png'
 import { context } from '../../../hooks/store'
-import { postArticle, postPic } from '../../../api/article'
+import { postArticle } from '../../../api/article'
 import { IArticle } from '../../../libs/model'
 
 interface Props {
@@ -32,24 +32,16 @@ export default function PublicArticle ({ refresh }: Props) {
     } else if (articleTitle.length > 20 || articleTitle.length < 4) {
       message.info('发布标题字数在4-20之间')
     } else {
-      const res = await postArticle(articleCategoryId, articleContent, articleTitle)
+      let res
+      if (list.length) {
+        console.log(list)
+        res = await postArticle(articleCategoryId, articleContent, articleTitle, list)
+      } else {
+        res = await postArticle(articleCategoryId, articleContent, articleTitle)
+      }
       if (res?.code === 200) {
-        refresh()
-        const id = res.data
-        if (list.length > 0) {
-          const formData = new FormData()
-          for (const item of list) {
-            formData.append('files', item)
-          }
-          const res2 = await postPic(formData, id)
-          if (res2?.success) {
-            message.success('发布成功')
-            closePost()
-          }
-        } else {
-          message.success('发布成功')
-          closePost()
-        }
+        message.success('发布成功')
+        closePost()
       } else {
         message.error(res?.errorMsg as string)
       }

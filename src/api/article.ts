@@ -49,27 +49,28 @@ export const toggleLike = async (id: string) => {
 }
 
 // 发布文章
-export const postArticle = async (articleCategoryId: number, articleContent: String, articleTitle: String) => {
+export const postArticle = async (articleCategoryId: number, articleContent: String, articleTitle: String, files?: File[]) => {
   return await request<string>({
     url: '/article/create',
     method: 'POST',
     data: {
       articleCategoryId,
       articleContent,
-      articleTitle
+      articleTitle,
+      files
     }
   })
 }
 
-// 上传图片
-export const postPic = async (files: FormData, id: string) => {
-  return await request({
-    url: `/article/uploadImg/?articleId=${id}`,
-    method: 'POST',
-    headers: { 'Content-Type': 'multipart/form-data' },
-    data: files
-  })
-}
+// // 上传图片
+// export const postPic = async (files: FormData, id: string) => {
+//   return await request({
+//     url: `/article/uploadImg/?articleId=${id}`,
+//     method: 'POST',
+//     headers: { 'Content-Type': 'multipart/form-data' },
+//     data: files
+//   })
+// }
 
 // 查询文章详细内容
 export const getRetailArticle = async (id: string) => {
