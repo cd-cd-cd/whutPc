@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { exitUser, getUser, isLogin } from '../../api/user'
 import { IResUserInfo } from '../../libs/model'
+import Icon from '../../assets/icon.jpg'
 import style from './index.module.scss'
 
 export default function HomeHeader () {
@@ -53,6 +54,7 @@ export default function HomeHeader () {
 
   return (
     <div className={style.header}>
+      <img src={Icon} className={style.iconPic}></img>
       {
         login
           ? <div className={style.header_box}>
