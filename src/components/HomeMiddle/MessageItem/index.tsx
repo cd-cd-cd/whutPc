@@ -123,7 +123,7 @@ export default function MessageItem ({ post, avatar }: Props) {
   return (
     <div className={style.itemBox}>
       <div className={style.itemHeader}>
-        <div className={style.avatarBox}>
+        <div className={style.avatarBox} onClick={() => transNav()}>
           <img className={style.avatarImg} src={post.avatar}></img>
         </div>
         <div className={style.info}>
