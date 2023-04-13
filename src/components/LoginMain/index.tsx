@@ -66,7 +66,7 @@ export default function LoginMain () {
                 className={style.input}
               ></Input.Password>
             </Form.Item>
-            <Form.Item>
+            <Form.Item className={style.btn_box}>
               <div className={style.span} onClick={() => toRegister()}>还没有账号，点击创建账号</div>
               <Button htmlType="submit" type='primary' className={style.button}>登录</Button>
             </Form.Item>

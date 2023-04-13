@@ -1,6 +1,6 @@
 .main {
   flex: 1;
-  background-color: rgb(240, 248, 255);
+  background-color: var(--back-main-color);
   display: flex;
   flex-direction: row;
 
@@ -43,7 +43,7 @@
   }
 }
 
-.form{
+.form {
   width: 90%;
   margin: 50px auto;
 }
@@ -52,31 +52,40 @@
   width: 100%;
 }
 
-.input_code{
+.input_code {
   width: 220px;
 }
 
-.getCode{
+.getCode {
   margin-left: 10px;
 }
 
-.span{
+.span {
   font-size: 14px;
-  color: rgb(24,144,255);
+  color: var(--span-color);
   margin-bottom: 5px;
   cursor: pointer;
 }
 
-.span:hover{
-  color: rgb(64,169,255);
+.span:hover {
+  color: var(--span-click-color);
 }
 
-.button{
+.button {
   width: 100%;
 }
 
-.loginPic{
+.loginPic {
   display: block;
   margin: 10px auto -20px auto;
   width: 130px;
+}
+
+.btn_box {
+  :global {
+    .ant-btn-primary {
+      border-color: var(--btn-border-color);
+      background-color: var(--btn-back-color);
+    }
+  }
 }

@@ -1,6 +1,6 @@
 .main {
   flex: 1;
-  background-color: rgb(240, 248, 255);
+  background-color: var(--back-main-color);
   display: flex;
   flex-direction: row;
 
@@ -62,15 +62,37 @@
 
 .span{
   font-size: 14px;
-  color: rgb(24,144,255);
+  color: var(--span-color);
   margin-bottom: 5px;
   cursor: pointer;
 }
 
 .span:hover{
-  color: rgb(64,169,255);
+  color: var(--span-click-color);
 }
 
 .button{
   width: 100%;
+}
+
+.btn_box {
+  :global {
+    .ant-btn-primary {
+      border-color: var(--btn-border-color);
+      background-color: var(--btn-back-color);
+    }
+  }
+}
+
+.btn_box2 {
+  width: 130px;
+  position: absolute;
+  top: 0px;
+  right: 0;
+  :global {
+    .ant-btn-primary {
+      border-color: var(--btn-border-color);
+      background-color: var(--btn-back-color);
+    }
+  }
 }

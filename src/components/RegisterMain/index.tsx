@@ -98,9 +98,10 @@ export default function RegisterMain () {
                 <Input placeholder='验证码' className={style.input_code} />
               </Form.Item>
               <Form.Item
-                noStyle
+                // noStyle
+                className={style.btn_box2}
               >
-                <Button type='primary' className={style.getCode} onClick={() => getCodeClick()}>点击获取验证码</Button>
+                <Button type='primary' onClick={() => getCodeClick()}>点击获取验证码</Button>
               </Form.Item>
             </Form.Item>
             <Form.Item
@@ -129,7 +130,7 @@ export default function RegisterMain () {
                 className={style.input}
               ></Input.Password>
             </Form.Item>
-            <Form.Item>
+            <Form.Item className={style.btn_box}>
               <div className={style.span} onClick={() => toLogin()}>已经注册，账号登录</div>
               <Button htmlType="submit" type='primary' className={style.button}>注册</Button>
             </Form.Item>
