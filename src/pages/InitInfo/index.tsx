@@ -245,7 +245,7 @@ export default function InitInfo () {
         </div>
         <div className={style.foot}>
           <div className={style.pag}>
-            <Pagination current={current} onChange={(page) => setCurrent(page)} total={total}></Pagination>
+            <Pagination showSizeChanger={false} current={current} onChange={(page) => setCurrent(page)} total={total}></Pagination>
           </div>
           <div className={style.article_box}>
             {

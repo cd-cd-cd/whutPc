@@ -4,23 +4,12 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
 import { getCode, register } from '../../api/user'
 import style from './index.module.scss'
 import { useNavigate } from 'react-router-dom'
+import useVerify from '../../hooks/useVerify';
 
 export default function RegisterMain () {
   const [email, setEmail] = useState('')
   const navigator = useNavigate()
-
-  // 检查邮箱
-  const checkEmail = (email: string) => {
-    if (email.length === 0) {
-      message.info('邮箱不为空')
-      return false
-    } else if (email.length !== 18 || email.slice(6) !== '@whut.edu.cn') {
-      message.info('邮箱格式不正确')
-      return false
-    } else {
-      return true
-    }
-  }
+  const { checkEmail } = useVerify()
 
   // 发送验证码
   const getCodeClick = async () => {
@@ -64,6 +53,7 @@ export default function RegisterMain () {
             content: '注册成功!',
             key: 'registerCode'
           })
+          navigator('/login')
         } else {
           message.error({ content: '系统繁忙，请稍后再试', key: 'registerCode' })
         }
@@ -91,9 +81,10 @@ export default function RegisterMain () {
             <Form.Item
               name='email'
               rules={[
-                { required: true, message: '请输入教育邮箱' }]}
+                { pattern: /^([a-zA-Z\d][\w-]{2,})@(\w{2,})\.([a-z]{2,})(\.[a-z]{2,})?$/, message: '邮箱格式不正确' },
+                { required: true, message: '请输入邮箱' }]}
             >
-              <Input placeholder='教育邮箱' className={style.input} value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input placeholder='邮箱' className={style.input} value={email} onChange={(e) => setEmail(e.target.value)} />
             </Form.Item>
             <Form.Item
             >

@@ -5,21 +5,12 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
 import style from './index.module.scss'
 import LoginPic from '../../assets/loginPic.webp'
 import { login } from '../../api/user'
+import useVerify from '../../hooks/useVerify'
 
 export default function LoginMain () {
   const [email, setEmail] = useState('')
   const navigator = useNavigate()
-
-  // 检查邮箱
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const checkEmail = (email: string) => {
-    if (emailRegex.test(email)) {
-      return true
-    } else {
-      message.info('邮箱格式不正确')
-      return false
-    }
-  }
+  const { checkEmail } = useVerify()
 
   const onFinish = async (values: any) => {
     const { email, password } = values
@@ -57,9 +48,10 @@ export default function LoginMain () {
             <Form.Item
               name='email'
               rules={[
-                { required: true, message: '请输入教育邮箱' }]}
+                { pattern: /^([a-zA-Z\d][\w-]{2,})@(\w{2,})\.([a-z]{2,})(\.[a-z]{2,})?$/, message: '邮箱格式不正确' },
+                { required: true, message: '请输入邮箱' }]}
             >
-              <Input placeholder='教育邮箱' className={style.input} value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input placeholder='邮箱' className={style.input} value={email} onChange={(e) => setEmail(e.target.value)} />
             </Form.Item>
             <Form.Item
               name='password'

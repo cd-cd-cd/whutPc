@@ -97,7 +97,7 @@ export default function PerHome () {
             }
           </div>
           <div className={style.pag}>
-            <Pagination current={current} onChange={(page) => setCurrent(page)} total={total}></Pagination>
+            <Pagination showSizeChanger={false} current={current} onChange={(page) => setCurrent(page)} total={total}></Pagination>
           </div>
         </div>
       </div>
