@@ -170,3 +170,14 @@ export const toggleSecondLike = async (id: number) => {
     method: 'PUT'
   })
 }
+
+// 查询文章
+export const searchArticle = async (key: string) => {
+  return await request({
+    url: '/article/search',
+    method: 'GET',
+    params: {
+      key
+    }
+  })
+}

@@ -11,15 +11,13 @@ export default function LoginMain () {
   const navigator = useNavigate()
 
   // 检查邮箱
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const checkEmail = (email: string) => {
-    if (email.length === 0) {
-      message.info('邮箱不为空')
-      return false
-    } else if (email.length !== 18 || email.slice(6) !== '@whut.edu.cn') {
+    if (emailRegex.test(email)) {
+      return true
+    } else {
       message.info('邮箱格式不正确')
       return false
-    } else {
-      return true
     }
   }
 

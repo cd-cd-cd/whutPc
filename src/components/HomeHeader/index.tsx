@@ -5,6 +5,8 @@ import { exitUser, getUser, isLogin } from '../../api/user'
 import { IResUserInfo } from '../../libs/model'
 import Icon from '../../assets/icon.jpg'
 import style from './index.module.scss'
+import Search from 'antd/lib/input/Search'
+import { searchArticle } from '../../api/article'
 
 export default function HomeHeader () {
   const navigator = useNavigate()
@@ -48,13 +50,23 @@ export default function HomeHeader () {
     }
   }
 
+  const onSearch = async (value: string) => {
+    const res = await searchArticle(value)
+    if (res?.success) {
+      console.log(res)
+    }
+  }
+
   useEffect(() => {
     getIsLogin()
   }, [])
 
   return (
     <div className={style.header}>
-      <img src={Icon} className={style.iconPic}></img>
+      <div className={style.leftBox}>
+        <img src={Icon} className={style.iconPic}></img>
+        <Search placeholder="搜索想要的内容" allowClear onSearch={onSearch} style={{ width: 200 }} />
+      </div>
       {
         login
           ? <div className={style.header_box}>
