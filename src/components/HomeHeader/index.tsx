@@ -1,5 +1,5 @@
 import { message } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { exitUser, getUser, isLogin } from '../../api/user'
 import { IResUserInfo } from '../../libs/model'
@@ -7,11 +7,13 @@ import Icon from '../../assets/icon.jpg'
 import style from './index.module.scss'
 import Search from 'antd/lib/input/Search'
 import { searchArticle } from '../../api/article'
+import { context } from '../../hooks/store'
 
 export default function HomeHeader () {
   const navigator = useNavigate()
   const [user, setUser] = useState<IResUserInfo>()
   const [login, setLogin] = useState<boolean>()
+  const { setCategoryId } = useContext(context)
 
   const getInfo = async (email: string) => {
     const res = await getUser(email)
@@ -64,7 +66,7 @@ export default function HomeHeader () {
   return (
     <div className={style.header}>
       <div className={style.leftBox}>
-        <img src={Icon} className={style.iconPic}></img>
+        <img onClick={() => { setCategoryId(-1) }} src={Icon} className={style.iconPic}></img>
         <Search placeholder="搜索想要的内容" allowClear onSearch={onSearch} style={{ width: 200 }} />
       </div>
       {
